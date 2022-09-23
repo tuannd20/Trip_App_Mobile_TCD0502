@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TripAppTCD0502</string>
+    <string name="bottom_home">Home</string>
+    <string name="bottom_upload">Upload</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_blank_fragment">Home fragment</string>
+    <string name="upload_blank_fragment">Upload fragment</string>
+</resources>
