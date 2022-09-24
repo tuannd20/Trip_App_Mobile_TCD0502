@@ -13,7 +13,7 @@
             android:label="New Trip"
             android:parentActivityName=".MainActivity"
             android:name=".AddTripActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
