@@ -29,6 +29,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
 
     public ExpenseAppDataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
