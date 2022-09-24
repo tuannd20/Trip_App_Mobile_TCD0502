@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final  int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Expense_Management.db";
-    private  Context context;
+    private final Context context;
 
     private static final String TABLE_TRIP = "TRIPS";
     private static final String _ID = "_id";
@@ -23,7 +23,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
 
     private static final String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_TRIP + " (" + _ID +
             " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT NOT NULL, " + DESTINATION
-            + " TEXT NOT NULL, " + DATE_OF_TRIP + " TEXT NOT NULL, " + REQUIRE_ASSESSMENT +
+            + " TEXT, " + DATE_OF_TRIP + " TEXT, " + REQUIRE_ASSESSMENT +
             " TEXT, " + DESC + " TEXT);";
 
 

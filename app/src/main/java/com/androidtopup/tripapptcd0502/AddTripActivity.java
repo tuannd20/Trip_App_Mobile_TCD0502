@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -56,19 +57,20 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     private void getInputData() {
-        name_input = (TextInputLayout)findViewById(R.id.inputNameOfTrip);
-        destination_input = (TextInputLayout)findViewById(R.id.inputDestination);
-        date_of_trip_input = (TextInputLayout)findViewById(R.id.dateOfTripInput);
-        description_input = (TextInputLayout)findViewById(R.id.inputDescription);
+         name_input = (TextInputLayout) findViewById(R.id.inputNameOfTrip);
+         destination_input = (TextInputLayout) findViewById(R.id.inputDestination);
+         date_of_trip_input = (TextInputLayout) findViewById(R.id.dateOfTripInput);
+         description_input = (TextInputLayout) findViewById(R.id.inputDescription);
         add_trip = findViewById(R.id.button_add);
         add_trip.setOnClickListener(new View.OnClickListener() {
-            String strName = name_input.getEditText().getText().toString().trim();
-            String strDestination = destination_input.getEditText().getText().toString().trim();
-            String strDate = date_of_trip_input.getEditText().getText().toString().trim();
-            String strDescription = description_input.getEditText().getText().toString().trim();
-            String value = getValueAssessment();
             @Override
             public void onClick(View view) {
+                final String strName =name_input.getEditText().getText().toString().trim();
+                final String strDestination = destination_input.getEditText().getText().toString().trim();
+                final String strDate = date_of_trip_input.getEditText().getText().toString().trim();
+                final String strDescription = description_input.getEditText().getText().toString().trim();
+                final String value = getValueAssessment();
+                Toast.makeText(AddTripActivity.this, strName, Toast.LENGTH_SHORT).show();
                 insertDataOfTrip(strName, strDestination, strDate, value, strDescription);
             }
         });
@@ -93,7 +95,7 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     private String getValueAssessment() {
-        String valueAssessment = new String();
+        String valueAssessment = "";
         rb_yes = findViewById(R.id.rb_yes);
         rb_no = findViewById(R.id.rb_no);
 
