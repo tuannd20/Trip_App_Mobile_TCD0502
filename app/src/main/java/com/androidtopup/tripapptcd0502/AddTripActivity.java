@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -37,7 +38,7 @@ public class AddTripActivity extends AppCompatActivity {
 
         handleDateTrip();
         handleCancelBtn();
-        getInputData();
+        handleInsertData();
     }
 
     private void handleDateTrip() {
@@ -56,21 +57,37 @@ public class AddTripActivity extends AppCompatActivity {
         });
     }
 
-    private void getInputData() {
-         name_input = (TextInputLayout) findViewById(R.id.inputNameOfTrip);
-         destination_input = (TextInputLayout) findViewById(R.id.inputDestination);
-         date_of_trip_input = (TextInputLayout) findViewById(R.id.dateOfTripInput);
-         description_input = (TextInputLayout) findViewById(R.id.inputDescription);
-        add_trip = findViewById(R.id.button_add);
-        add_trip.setOnClickListener(new View.OnClickListener() {
+    private void handleInsertData() {
+         name_input = findViewById(R.id.inputNameOfTrip);
+         destination_input =  findViewById(R.id.inputDestination);
+         date_of_trip_input =  findViewById(R.id.dateOfTripInput);
+         description_input =  findViewById(R.id.inputDescription);
+         add_trip = findViewById(R.id.button_add);
+         add_trip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String strName =name_input.getEditText().getText().toString().trim();
+
+                final String strName = name_input.getEditText().getText().toString().trim();
                 final String strDestination = destination_input.getEditText().getText().toString().trim();
                 final String strDate = date_of_trip_input.getEditText().getText().toString().trim();
                 final String strDescription = description_input.getEditText().getText().toString().trim();
                 final String value = getValueAssessment();
-                Toast.makeText(AddTripActivity.this, strName, Toast.LENGTH_SHORT).show();
+
+                if  (TextUtils.isEmpty(strName)){
+                    name_input.setError("Name of trip is empty");
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strDestination)){
+                    destination_input.setError("Destination is empty");
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strDate)){
+                    date_of_trip_input.setError("Date of trip is empty");
+                    return;
+                }
+
                 insertDataOfTrip(strName, strDestination, strDate, value, strDescription);
             }
         });

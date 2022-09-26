@@ -21,10 +21,13 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final String REQUIRE_ASSESSMENT= "requireAssessment";
     private static final String DESC = "description";
 
-    private static final String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_TRIP + " (" + _ID +
-            " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT NOT NULL, " + DESTINATION
-            + " TEXT, " + DATE_OF_TRIP + " TEXT, " + REQUIRE_ASSESSMENT +
-            " TEXT, " + DESC + " TEXT);";
+    private static final String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_TRIP + " ("
+            + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + NAME + " TEXT NOT NULL, "
+            + DESTINATION + " TEXT, "
+            + DATE_OF_TRIP + " TEXT, "
+            + REQUIRE_ASSESSMENT + " TEXT, "
+            + DESC + " TEXT);";
 
 
     public ExpenseAppDataBaseHelper(@Nullable Context context) {
