@@ -8,9 +8,11 @@
         <entry key="..\:/Document/GCD_TOPUP/MVVM_TRIPAPP/app/src/main/res/layout/fragment_home_trip.xml" value="0.3442028985507246" />
         <entry key="..\:/Document/GCD_TOPUP/MVVM_TRIPAPP/app/src/main/res/layout/fragment_upload_cloud.xml" value="0.3442028985507246" />
         <entry key="..\:/Document/GCD_TOPUP/MVVM_TRIPAPP/app/src/main/res/menu/bottom_nav_menu.xml" value="0.34479166666666666" />
-        <entry key="..\:/TCD0502_Topup/Mobile/Demo/MobileApp/Trip_App_Mobile_TCD0502/app/src/main/res/layout/activity_add_trip.xml" value="0.22826086956521738" />
-        <entry key="..\:/TCD0502_Topup/Mobile/Demo/MobileApp/Trip_App_Mobile_TCD0502/app/src/main/res/layout/activity_main.xml" value="0.3697916666666667" />
-        <entry key="..\:/TCD0502_Topup/Mobile/Demo/MobileApp/Trip_App_Mobile_TCD0502/app/src/main/res/layout/fragment_home_trip.xml" value="0.22826086956521738" />
+        <entry key="..\:/Document/GCD_TOPUP/Trip_App_Mobile_TCD0502/app/src/main/res/layout/activity_add_trip.xml" value="0.3442028985507246" />
+        <entry key="..\:/Document/GCD_TOPUP/Trip_App_Mobile_TCD0502/app/src/main/res/layout/activity_main.xml" value="0.3442028985507246" />
+        <entry key="..\:/Document/GCD_TOPUP/Trip_App_Mobile_TCD0502/app/src/main/res/layout/fragment_home_trip.xml" value="0.3442028985507246" />
+        <entry key="..\:/Document/GCD_TOPUP/Trip_App_Mobile_TCD0502/app/src/main/res/layout/fragment_upload_cloud.xml" value="0.3442028985507246" />
+        <entry key="..\:/Document/GCD_TOPUP/Trip_App_Mobile_TCD0502/app/src/main/res/layout/trip_view.xml" value="0.3442028985507246" />
       </map>
     </option>
   </component>

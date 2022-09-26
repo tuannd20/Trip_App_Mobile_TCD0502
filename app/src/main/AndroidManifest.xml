@@ -11,11 +11,11 @@
         android:theme="@style/Theme.TripAppTCD0502">
         <activity
             android:label="New Trip"
-            android:parentActivityName=".MainActivity"
-            android:name=".AddTripActivity"
+            android:parentActivityName=".View.MainActivity"
+            android:name=".View.AddTripActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".View.MainActivity"
             android:exported="true"
             android:label="Home">
             <intent-filter>

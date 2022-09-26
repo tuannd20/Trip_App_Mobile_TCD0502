@@ -1,12 +1,12 @@
-package com.androidtopup.tripapptcd0502;
+package com.androidtopup.tripapptcd0502.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final  int DATABASE_VERSION = 4;
@@ -30,7 +30,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             + DESC + " TEXT);";
 
 
-    public ExpenseAppDataBaseHelper(@Nullable Context context) {
+    public ExpenseAppDataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void create(String nameTrip, String destination, String date, String assessment, String desc) {
+    public void create(String nameTrip, String destination, String date, String assessment, String desc) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NAME, nameTrip);
@@ -62,5 +62,16 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
         }
         db.close();
+    }
+
+     public Cursor displayAllTrip() {
+        String query = "SELECT * FROM " + TABLE_TRIP;
+        SQLiteDatabase result = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (result != null){
+            cursor = result.rawQuery(query, null);
+        }
+        return cursor;
     }
 }

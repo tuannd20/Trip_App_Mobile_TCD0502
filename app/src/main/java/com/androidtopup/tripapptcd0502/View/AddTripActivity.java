@@ -1,9 +1,10 @@
-package com.androidtopup.tripapptcd0502;
+package com.androidtopup.tripapptcd0502.View;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -11,14 +12,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
+import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
+import com.androidtopup.tripapptcd0502.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 public class AddTripActivity extends AppCompatActivity {
 
@@ -89,6 +90,8 @@ public class AddTripActivity extends AppCompatActivity {
                 }
 
                 insertDataOfTrip(strName, strDestination, strDate, value, strDescription);
+                Intent homeScreen = new Intent(getApplicationContext(), HomeTripFragment.class);
+                startActivity(homeScreen);
             }
         });
     }

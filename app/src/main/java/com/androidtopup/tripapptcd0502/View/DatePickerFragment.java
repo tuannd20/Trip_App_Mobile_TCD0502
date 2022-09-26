@@ -1,4 +1,4 @@
-package com.androidtopup.tripapptcd0502;
+package com.androidtopup.tripapptcd0502.View;
 
 import static java.text.DateFormat.getDateInstance;
 
@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
