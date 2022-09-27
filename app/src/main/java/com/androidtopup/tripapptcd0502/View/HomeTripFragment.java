@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class HomeTripFragment extends Fragment {
+public class HomeTripFragment extends Fragment  {
 
     View view;
     RecyclerView recyclerView;
@@ -56,10 +57,19 @@ public class HomeTripFragment extends Fragment {
 
         handleStoreDataInArrays();
 
-        tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), trip_id, trip_name, trip_destination, trip_date, trip_assessment);
+        tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
+                trip_id, trip_name, trip_destination, trip_date, trip_assessment);
         recyclerView.setAdapter(tripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeTripFragment.this.getActivity()));
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            getActivity().recreate();
+        }
     }
 
     public void handleStoreDataInArrays(){
@@ -70,11 +80,11 @@ public class HomeTripFragment extends Fragment {
             while (cursor.moveToNext()) {
                 trip_id.add(cursor.getString(0));
 //                Log.i("id", String.valueOf(trip_id.add(cursor.getString(0))));
-                trip_name.add(cursor.getString(2));
+                trip_name.add(cursor.getString(1));
 //                Log.i("name", String.valueOf(trip_name.add(cursor.getString(0))));
-                trip_destination.add(cursor.getString(3));
-                trip_date.add(cursor.getString(4));
-                trip_assessment.add(cursor.getString(5));
+                trip_destination.add(cursor.getString(2));
+                trip_date.add(cursor.getString(3));
+                trip_assessment.add(cursor.getString(4));
             }
         }
     }

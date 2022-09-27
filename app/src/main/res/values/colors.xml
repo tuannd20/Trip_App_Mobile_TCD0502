@@ -10,4 +10,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#EC0E0E</color>
+    <color name="blue_200">#D5E4F7</color>
+    <color name="color_error">#CC0000</color>
+    <color name="btn_see_all">#F7F7F7</color>
 </resources>

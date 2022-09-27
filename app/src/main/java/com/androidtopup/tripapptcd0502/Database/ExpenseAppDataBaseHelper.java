@@ -74,4 +74,31 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    public Cursor getDescriptionById(String id) {
+        Cursor cursor = null;
+        String query = "SELECT " + DESC + " FROM " + TABLE_TRIP + " WHERE " + _ID + " = " + id;
+        SQLiteDatabase result = this.getWritableDatabase();
+        if (result != null) {
+            cursor = result.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    public void updateData(String trip_id, String nameTrip, String destination, String date, String assessment, String desc) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues valueUpdate = new ContentValues();
+        valueUpdate.put(NAME, nameTrip);
+        valueUpdate.put(DESTINATION, destination);
+        valueUpdate.put(DATE_OF_TRIP, date);
+        valueUpdate.put(REQUIRE_ASSESSMENT, assessment);
+        valueUpdate.put(DESC, desc);
+
+        long result = db.update(TABLE_TRIP, valueUpdate, "_id=?", new String[]{trip_id});
+        if (result == -1) {
+            Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import com.androidtopup.tripapptcd0502.R;
 import com.androidtopup.tripapptcd0502.View.HomeTripFragment;
-import com.androidtopup.tripapptcd0502.View.UploadCloudFragment;
+//import com.androidtopup.tripapptcd0502.View.UploadCloudFragment;
 import com.androidtopup.tripapptcd0502.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.home:
                     replaceFragment(new HomeTripFragment());
                     break;
-                case R.id.upload:
-                    replaceFragment(new UploadCloudFragment());
-                    break;
+//                case R.id.upload:
+//                    replaceFragment(new UploadCloudFragment());
+//                    break;
             }
         });
     }

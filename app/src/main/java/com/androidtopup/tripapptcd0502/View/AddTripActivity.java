@@ -4,6 +4,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +34,8 @@ public class AddTripActivity extends AppCompatActivity {
     TextInputLayout description_input;
     Button add_trip;
     Button cancel_btn;
+
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,22 +81,25 @@ public class AddTripActivity extends AppCompatActivity {
 
                 if  (TextUtils.isEmpty(strName)){
                     name_input.setError("Name of trip is empty");
+                    displayErrorAlert();
                     return;
                 }
 
                 if  (TextUtils.isEmpty(strDestination)){
                     destination_input.setError("Destination is empty");
+                    displayErrorAlert();
                     return;
                 }
 
                 if  (TextUtils.isEmpty(strDate)){
                     date_of_trip_input.setError("Date of trip is empty");
+                    displayErrorAlert();
                     return;
                 }
 
+                displayDataAlert(strName, strDestination, strDate, value, strDescription);
+
                 insertDataOfTrip(strName, strDestination, strDate, value, strDescription);
-                Intent homeScreen = new Intent(getApplicationContext(), HomeTripFragment.class);
-                startActivity(homeScreen);
             }
         });
     }
@@ -130,9 +138,43 @@ public class AddTripActivity extends AppCompatActivity {
         return valueAssessment;
     }
 
-    private void insertDataOfTrip(String nameTrip, String destination, String date, String assessment, String desc) {
+    private void insertDataOfTrip(String nameTrip,
+                                  String destination,
+                                  String date,
+                                  String assessment,
+                                  String desc) {
         ExpenseAppDataBaseHelper db = new ExpenseAppDataBaseHelper(AddTripActivity.this);
         db.create(nameTrip, destination, date, assessment, desc);
+    }
+
+    private void displayDataAlert(String name,
+                                  String destination,
+                                  String date,
+                                  String assessment,
+                                  String description) {
+        new AlertDialog.Builder(this).setTitle("Details trip").setMessage(
+                "\nName: " + name +
+                        "\nDestination: " + destination +
+                        "\nDate of trip: " + date +
+                        "\nRequire Assessment: " + assessment +
+                        "\nDescription: " + description
+        ).setPositiveButton("Back", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        }).show();
+    }
+
+    private void displayErrorAlert() {
+        new AlertDialog.Builder(this).setTitle("Details trip").setMessage(
+                "You need to fill all required fields"
+        ).setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 
 }

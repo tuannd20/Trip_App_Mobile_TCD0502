@@ -15,6 +15,11 @@
             android:name=".View.AddTripActivity"
             android:exported="true" />
         <activity
+            android:label="Update trip"
+            android:parentActivityName=".View.MainActivity"
+            android:name=".View.UpdateTripActivity"
+            android:exported="true" />
+        <activity
             android:name=".View.MainActivity"
             android:exported="true"
             android:label="Home">
