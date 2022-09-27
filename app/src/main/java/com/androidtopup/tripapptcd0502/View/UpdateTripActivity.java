@@ -2,19 +2,26 @@ package com.androidtopup.tripapptcd0502.View;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class UpdateTripActivity extends AppCompatActivity {
@@ -38,6 +45,7 @@ public class UpdateTripActivity extends AppCompatActivity {
 
         ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
         handleUpdateTrip();
+        handleDateTrip();
     }
 
     private void handleUpdateTrip() {
@@ -50,7 +58,13 @@ public class UpdateTripActivity extends AppCompatActivity {
         update_trip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateDataOfTrip(id, name, destination, date, assessment, desc);
+                final String strName = name_input.getEditText().getText().toString().trim();
+                final String strDestination = destination_input.getEditText().getText().toString().trim();
+                final String strDate = date_of_trip_input.getEditText().getText().toString().trim();
+                final String strDescription = description_input.getEditText().getText().toString().trim();
+                final String value = getValueAssessment();
+
+                updateDataOfTrip(id, strName, strDestination, strDate, value, strDescription);
             }
         });
     }
@@ -69,6 +83,7 @@ public class UpdateTripActivity extends AppCompatActivity {
                 date = getIntent().getStringExtra("date");
                 assessment = getIntent().getStringExtra("assessment");
                 Log.i("id: ", id);
+                Log.i("date: ", date);
 
                 Cursor cursor = ExpenseDB.getDescriptionById(id);
                 if(cursor.moveToFirst()){
@@ -107,6 +122,30 @@ public class UpdateTripActivity extends AppCompatActivity {
                                   String desc) {
         ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
         ExpenseDB.updateData(id, nameTrip, destination, date, assessment, desc);
+    }
+
+    private void handleDateTrip() {
+        TextInputEditText mTextInputEditText = findViewById(R.id.date_trip_txt_update);
+
+        mTextInputEditText.setInputType(InputType.TYPE_NULL);
+        mTextInputEditText.setKeyListener(null);
+        mTextInputEditText.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DialogFragment newFragment = new DatePickerUpdate();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateDOT(LocalDate dot){
+        TextInputEditText dobText =  findViewById(R.id.date_trip_txt_update);
+        DateTimeFormatter formatDateOfTrip = DateTimeFormatter.ofPattern( "dd/MM/uuuu" ) ;
+        String result = dot.format( formatDateOfTrip ) ;
+        dobText.setText(result);
     }
 
     private String getValueAssessment() {

@@ -67,7 +67,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                 updateTripScreen.putExtra("id", String.valueOf(trip_id.get(position)));
                 updateTripScreen.putExtra("name", String.valueOf(trip_name.get(position)));
                 updateTripScreen.putExtra("destination", String.valueOf(trip_destination.get(position)));
-                updateTripScreen.putExtra("date", String.valueOf(trip_name.get(position)));
+                updateTripScreen.putExtra("date", String.valueOf(trip_date.get(position)));
                 updateTripScreen.putExtra("assessment", String.valueOf(trip_assessment.get(position)));
                 updateTripScreen.putExtra("description", String.valueOf(trip_assessment.get(position)));
 

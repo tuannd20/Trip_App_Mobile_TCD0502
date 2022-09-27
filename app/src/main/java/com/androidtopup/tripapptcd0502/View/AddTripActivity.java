@@ -98,7 +98,6 @@ public class AddTripActivity extends AppCompatActivity {
                 }
 
                 displayDataAlert(strName, strDestination, strDate, value, strDescription);
-
                 insertDataOfTrip(strName, strDestination, strDate, value, strDescription);
             }
         });
@@ -153,7 +152,7 @@ public class AddTripActivity extends AppCompatActivity {
                                   String assessment,
                                   String description) {
         new AlertDialog.Builder(this).setTitle("Details trip").setMessage(
-                "\nName: " + name +
+                        "\nName: " + name +
                         "\nDestination: " + destination +
                         "\nDate of trip: " + date +
                         "\nRequire Assessment: " + assessment +
