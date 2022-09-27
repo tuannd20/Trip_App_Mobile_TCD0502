@@ -79,9 +79,7 @@ public class HomeTripFragment extends Fragment  {
         } else {
             while (cursor.moveToNext()) {
                 trip_id.add(cursor.getString(0));
-//                Log.i("id", String.valueOf(trip_id.add(cursor.getString(0))));
                 trip_name.add(cursor.getString(1));
-//                Log.i("name", String.valueOf(trip_name.add(cursor.getString(0))));
                 trip_destination.add(cursor.getString(2));
                 trip_date.add(cursor.getString(3));
                 trip_assessment.add(cursor.getString(4));
