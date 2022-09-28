@@ -18,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -212,7 +211,7 @@ public class UpdateTripActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
                 ExpenseDB.deleteOneTripById(id);
-                Intent intent = new Intent(UpdateTripActivity.this, HomeTripFragment.class);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

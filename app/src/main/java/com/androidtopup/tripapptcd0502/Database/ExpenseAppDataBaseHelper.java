@@ -111,4 +111,9 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void deleteAllTrip() {
+        SQLiteDatabase exeDelete = this.getWritableDatabase();
+        exeDelete.execSQL("DELETE FROM " + TABLE_TRIP);
+    };
 }
