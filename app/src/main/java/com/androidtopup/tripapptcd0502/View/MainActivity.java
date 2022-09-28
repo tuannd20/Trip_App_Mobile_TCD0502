@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.home:
                     replaceFragment(new HomeTripFragment());
                     break;
-//                case R.id.upload:
-//                    replaceFragment(new UploadCloudFragment());
-//                    break;
+                case R.id.upload:
+                    replaceFragment(new UploadCloudFragment());
+                    break;
             }
         });
     }

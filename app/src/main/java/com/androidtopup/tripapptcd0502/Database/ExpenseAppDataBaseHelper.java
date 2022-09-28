@@ -101,4 +101,14 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void deleteOneTripById(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_TRIP, "_id=?", new String[]{id});
+        if (result == -1) {
+            Toast.makeText(context, "Delete Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
