@@ -1,30 +1,42 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidtopup.tripapptcd0502.Adapter.TripAdapter;
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class HomeTripFragment extends Fragment  {
 
-    View view;
     RecyclerView recyclerView;
     FloatingActionButton add_button;
 
@@ -32,13 +44,18 @@ public class HomeTripFragment extends Fragment  {
     ExpenseAppDataBaseHelper ExpenseDB;
     ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_assessment;
     TripAdapter tripAdapter;
+    MaterialToolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home_trip, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_trip, container, false);
         context = view.getContext();
-        recyclerView = view.findViewById(R.id.recyclerViewTrip);
+        toolbar = view.findViewById(R.id.topAppBar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        assert activity != null;
+        activity.setSupportActionBar(toolbar);
+
         add_button = view.findViewById((R.id.add_button));
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,19 +74,41 @@ public class HomeTripFragment extends Fragment  {
 
         handleStoreDataInArrays();
 
+        recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
                 trip_id, trip_name, trip_destination, trip_date, trip_assessment);
         recyclerView.setAdapter(tripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeTripFragment.this.getActivity()));
+
         return view;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            getActivity().recreate();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.top_app_bar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.delete:
+                confirmDeleteAll();
+                return true;
+            case R.id.search:
+                Toast.makeText(context, "Search Successfully", Toast.LENGTH_SHORT).show();
+                return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void handleStoreDataInArrays(){
@@ -85,5 +124,27 @@ public class HomeTripFragment extends Fragment  {
                 trip_assessment.add(cursor.getString(4));
             }
         }
+    }
+
+    private void confirmDeleteAll() {
+        AlertDialog.Builder confirmAlert = new AlertDialog.Builder(HomeTripFragment.this.requireContext());
+        confirmAlert.setTitle("Delete ");
+        confirmAlert.setMessage("Are you sure you want to delete ");
+        confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ExpenseDB = new ExpenseAppDataBaseHelper(HomeTripFragment.this.getContext());
+                ExpenseDB.deleteAllTrip();
+                Intent intent = new Intent(HomeTripFragment.this.getContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        confirmAlert.create().show();
     }
 }

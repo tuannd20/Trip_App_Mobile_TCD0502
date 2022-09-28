@@ -33,6 +33,5 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         LocalDate dot = LocalDate.of(year, ++month, day);
         ((AddTripActivity)getActivity()).updateDOB(dot);
-        ((UpdateTripActivity)getActivity()).updateDOT(dot);
     }
 }
