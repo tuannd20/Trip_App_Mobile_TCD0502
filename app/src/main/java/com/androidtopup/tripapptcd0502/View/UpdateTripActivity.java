@@ -101,6 +101,8 @@ public class UpdateTripActivity extends AppCompatActivity {
                 final String value = getValueAssessment();
 
                 updateDataOfTrip(id, strName, strDestination, strDate, value, strDescription);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -145,10 +147,9 @@ public class UpdateTripActivity extends AppCompatActivity {
         Objects.requireNonNull(date_of_trip_input.getEditText()).setText(date_update);
         Objects.requireNonNull(description_input.getEditText()).setText(desc_update);
 
-        if (rb_yes.getText() == assessment_update) {
+        if ("Yes".equals(assessment_update) ) {
             rb_yes.setChecked(true);
-            rb_no.setChecked(false);
-        } else {
+        } else if ("No".equals(assessment_update)) {
             rb_no.setChecked(true);
         }
     }
@@ -204,7 +205,7 @@ public class UpdateTripActivity extends AppCompatActivity {
 
     private void confirmDelete() {
         AlertDialog.Builder confirmAlert = new AlertDialog.Builder(this);
-        confirmAlert.setTitle("Delete" + name + " ?");
+        confirmAlert.setTitle("Delete " + name + " ?");
         confirmAlert.setMessage("Are you sure you want to delete " + name + " ?");
         confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
