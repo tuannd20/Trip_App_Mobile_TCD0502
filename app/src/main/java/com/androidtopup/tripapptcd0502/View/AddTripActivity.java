@@ -166,7 +166,7 @@ public class AddTripActivity extends AppCompatActivity {
         ).setPositiveButton("Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(AddTripActivity.this, HomeTripFragment.class);
+                Intent intent = new Intent(AddTripActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         }).show();
