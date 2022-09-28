@@ -1,22 +1,30 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,6 +41,7 @@ public class UpdateTripActivity extends AppCompatActivity {
     TextInputLayout description_input;
     Button update_trip_btn;
     Button view_expense_btn;
+    MaterialToolbar toolbar;
 
     Context context;
     String  id, name, destination, date, assessment, desc;
@@ -46,6 +55,32 @@ public class UpdateTripActivity extends AppCompatActivity {
         ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
         handleUpdateTrip();
         handleDateTrip();
+
+        toolbar = findViewById(R.id.topAppBarSub);
+        toolbar.setTitle("Trip: "+ name);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+               finish();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_app_bar_sub, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete) {
+            confirmDelete();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void handleUpdateTrip() {
@@ -65,6 +100,8 @@ public class UpdateTripActivity extends AppCompatActivity {
                 final String value = getValueAssessment();
 
                 updateDataOfTrip(id, strName, strDestination, strDate, value, strDescription);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -84,6 +121,7 @@ public class UpdateTripActivity extends AppCompatActivity {
                 assessment = getIntent().getStringExtra("assessment");
                 Log.i("id: ", id);
                 Log.i("date: ", date);
+                Log.i("assessment: ", assessment);
 
                 Cursor cursor = ExpenseDB.getDescriptionById(id);
                 if(cursor.moveToFirst()){
@@ -99,18 +137,18 @@ public class UpdateTripActivity extends AppCompatActivity {
 
     void setIntendData(String name_update, String destination_update,
                        String date_update, String assessment_update, String desc_update) {
-        String value = assessment_update;
-        rb_yes = findViewById(R.id.rb_yes);
-        rb_no = findViewById(R.id.rb_no);
+        rb_yes = findViewById(R.id.rb_yes_update);
+        rb_no = findViewById(R.id.rb_no_update);
+        Log.i("Value: ", assessment_update);
 
         Objects.requireNonNull(name_input.getEditText()).setText(name_update);
         Objects.requireNonNull(destination_input.getEditText()).setText(destination_update);
         Objects.requireNonNull(date_of_trip_input.getEditText()).setText(date_update);
         Objects.requireNonNull(description_input.getEditText()).setText(desc_update);
 
-        if (rb_yes.getText() == value) {
+        if ("Yes".equals(assessment_update) ) {
             rb_yes.setChecked(true);
-        } else {
+        } else if ("No".equals(assessment_update)) {
             rb_no.setChecked(true);
         }
     }
@@ -150,8 +188,8 @@ public class UpdateTripActivity extends AppCompatActivity {
 
     private String getValueAssessment() {
         String valueAssessment = "";
-        rb_yes = findViewById(R.id.rb_yes);
-        rb_no = findViewById(R.id.rb_no);
+        rb_yes = findViewById(R.id.rb_yes_update);
+        rb_no = findViewById(R.id.rb_no_update);
 
         if (rb_yes.isChecked()){
             valueAssessment = rb_yes.getText().toString().trim();
@@ -162,5 +200,27 @@ public class UpdateTripActivity extends AppCompatActivity {
             return valueAssessment;
         }
         return valueAssessment;
+    }
+
+    private void confirmDelete() {
+        AlertDialog.Builder confirmAlert = new AlertDialog.Builder(this);
+        confirmAlert.setTitle("Delete " + name + " ?");
+        confirmAlert.setMessage("Are you sure you want to delete " + name + " ?");
+        confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
+                ExpenseDB.deleteOneTripById(id);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        confirmAlert.create().show();
     }
 }

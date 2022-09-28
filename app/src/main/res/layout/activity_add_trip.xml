@@ -6,13 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".View.AddTripActivity">
 
+    <include
+        layout="@layout/tool_bar_sub" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputNameOfTrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/label_input_name"
         android:textStyle="bold"

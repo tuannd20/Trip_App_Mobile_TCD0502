@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".View.MainActivity">
 
+    <include
+        layout="@layout/tool_bar" />
+
     <FrameLayout
         android:id="@+id/frameLayoutApp"
         android:layout_width="0dp"

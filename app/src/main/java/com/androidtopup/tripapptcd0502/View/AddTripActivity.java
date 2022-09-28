@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,6 +37,7 @@ public class AddTripActivity extends AppCompatActivity {
     Button cancel_btn;
 
     private Context context;
+    MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,10 @@ public class AddTripActivity extends AppCompatActivity {
         handleDateTrip();
         handleCancelBtn();
         handleInsertData();
+
+        toolbar = findViewById(R.id.topAppBarSub);
+        toolbar.setTitle("New Trip");
+        setSupportActionBar(toolbar);
     }
 
     private void handleDateTrip() {
@@ -160,7 +166,8 @@ public class AddTripActivity extends AppCompatActivity {
         ).setPositiveButton("Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+                Intent intent = new Intent(AddTripActivity.this, HomeTripFragment.class);
+                startActivity(intent);
             }
         }).show();
     }
