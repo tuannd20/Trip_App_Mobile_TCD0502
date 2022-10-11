@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.HomeTripFragment">
-    <include
-        layout="@layout/tool_bar" />
+
+    <include layout="@layout/tool_bar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
@@ -18,16 +18,37 @@
         android:focusable="true"
         android:src="@drawable/ic_add_trip"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTrip"
         android:layout_width="409dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="124dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/textTripNameFilter"
+        android:layout_width="269dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="68dp"
+        android:minHeight="48dp"
+        android:text="Search...."
+        android:inputType="text"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="304dp"
+        android:layout_marginTop="68dp"
+        android:text="Search"
+        tools:ignore="TextContrastCheck" />
+
 
 </FrameLayout>

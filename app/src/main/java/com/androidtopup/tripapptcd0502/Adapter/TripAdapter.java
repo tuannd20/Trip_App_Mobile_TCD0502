@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TripAdapter.TripViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        Log.i("List Name ", String.valueOf(trip_name));
+
         holder.tv_trip_id.setText(String.valueOf(trip_id.get(position)));
         holder.tv_trip_name.setText(String.valueOf(trip_name.get(position)));
         holder.tv_trip_date.setText(String.valueOf(trip_date.get(position)));

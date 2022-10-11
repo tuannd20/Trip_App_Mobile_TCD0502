@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,20 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SearchView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidtopup.tripapptcd0502.Adapter.TripAdapter;
+import com.androidtopup.tripapptcd0502.Adapter.TripModel;
+import com.androidtopup.tripapptcd0502.Adapter.TripModelAdapter;
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -39,12 +38,16 @@ public class HomeTripFragment extends Fragment  {
 
     RecyclerView recyclerView;
     FloatingActionButton add_button;
+    EditText text_name_filter;
+    Button search_button;
 
     Context context;
     ExpenseAppDataBaseHelper ExpenseDB;
     ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_assessment;
     TripAdapter tripAdapter;
     MaterialToolbar toolbar;
+    TripModelAdapter tripModelAdapter;
+    ArrayList<TripModel> tripModels;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +55,8 @@ public class HomeTripFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_home_trip, container, false);
         context = view.getContext();
         toolbar = view.findViewById(R.id.topAppBar);
+        text_name_filter = view.findViewById(R.id.textTripNameFilter);
+        search_button = view.findViewById(R.id.buttonSearch);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         assert activity != null;
         activity.setSupportActionBar(toolbar);
@@ -71,12 +76,15 @@ public class HomeTripFragment extends Fragment  {
         trip_destination = new ArrayList<>();
         trip_date = new ArrayList<>();
         trip_assessment = new ArrayList<>();
+        tripModels = new ArrayList<>();
 
         handleStoreDataInArrays();
+        tripModels.add(new TripModel(trip_id.toString(), trip_name, trip_destination, trip_date, trip_assessment));
 
         recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
                 trip_id, trip_name, trip_destination, trip_date, trip_assessment);
+        tripModelAdapter = new TripModelAdapter(tripModels);
         recyclerView.setAdapter(tripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeTripFragment.this.getActivity()));
 
@@ -146,5 +154,8 @@ public class HomeTripFragment extends Fragment  {
             }
         });
         confirmAlert.create().show();
+    }
+
+    private void handleSearch() {
     }
 }
