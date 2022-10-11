@@ -1,15 +1,13 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Bundle;
-
 import com.androidtopup.tripapptcd0502.R;
-import com.androidtopup.tripapptcd0502.View.HomeTripFragment;
-//import com.androidtopup.tripapptcd0502.View.UploadCloudFragment;
 import com.androidtopup.tripapptcd0502.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
