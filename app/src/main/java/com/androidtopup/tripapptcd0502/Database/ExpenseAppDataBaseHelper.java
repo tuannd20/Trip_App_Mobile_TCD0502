@@ -120,7 +120,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     @SuppressLint("Recycle")
     public Cursor searchTrip(String keySearch) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String[] columns = {_ID,NAME};
+        String[] columns = {_ID,NAME,DESTINATION,DATE_OF_TRIP,REQUIRE_ASSESSMENT};
         Cursor cursor = null;
 
         if(keySearch != null && keySearch.length() > 0) {
