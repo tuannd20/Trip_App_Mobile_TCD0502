@@ -14,16 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SearchView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +45,9 @@ public class HomeTripFragment extends Fragment  {
     ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_assessment;
     TripAdapter tripAdapter;
     MaterialToolbar toolbar;
+    Button searchBtn;
+    EditText keySearchTrip;
+    String keySearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +55,8 @@ public class HomeTripFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_home_trip, container, false);
         context = view.getContext();
         toolbar = view.findViewById(R.id.topAppBar);
+        searchBtn = view.findViewById(R.id.buttonSearch);
+        keySearchTrip = view.findViewById(R.id.textTripNameFilter);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         assert activity != null;
         activity.setSupportActionBar(toolbar);
@@ -72,7 +77,25 @@ public class HomeTripFragment extends Fragment  {
         trip_date = new ArrayList<>();
         trip_assessment = new ArrayList<>();
 
-        handleStoreDataInArrays();
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                keySearch = keySearchTrip.getText().toString();
+                Intent intent = new Intent(HomeTripFragment.this.getActivity(), MainActivity.class);
+                intent.putExtra("key", keySearch);
+                startActivity(intent);
+            }
+        });
+
+        keySearchTrip.setText((CharSequence) requireActivity().getIntent().getStringExtra("key"));
+
+        if (keySearchTrip.length() == 0) {
+            keySearch = keySearchTrip.getText().toString();
+            handleStoreDataInArrays(keySearch);
+        } else if (keySearchTrip.length() > 0 ) {
+            String key = keySearchTrip.getText().toString();
+            handleStoreDataInArrays(key);
+        }
 
         recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
@@ -111,10 +134,35 @@ public class HomeTripFragment extends Fragment  {
         return super.onOptionsItemSelected(item);
     }
 
-    public void handleStoreDataInArrays(){
-        Cursor cursor = ExpenseDB.displayAllTrip();
+    public void handleStoreDataInArrays(String key){
+        Cursor cursor = ExpenseDB.displayAllTrip(key);
         if (cursor.getCount() == 0) {
             Toast.makeText(this.getContext(), "No Data", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                trip_id.add(cursor.getString(0));
+                trip_name.add(cursor.getString(1));
+                trip_destination.add(cursor.getString(2));
+                trip_date.add(cursor.getString(3));
+                trip_assessment.add(cursor.getString(4));
+            }
+        }
+    }
+
+    private void getkeySearch() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                keySearchTrip.getText().toString().trim();
+                Log.i("Search key", String.valueOf(keySearchTrip));
+            }
+        });
+    }
+
+    private void handleSearchTrip(String key) {
+        Cursor cursor = ExpenseDB.searchTrip(key);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this.getContext(), "Not Found", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
                 trip_id.add(cursor.getString(0));
@@ -146,5 +194,12 @@ public class HomeTripFragment extends Fragment  {
             }
         });
         confirmAlert.create().show();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayoutApp, fragment);
+        fragmentTransaction.commit();
     }
 }

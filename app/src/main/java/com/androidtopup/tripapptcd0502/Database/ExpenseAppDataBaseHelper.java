@@ -1,11 +1,11 @@
 package com.androidtopup.tripapptcd0502.Database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
@@ -64,14 +64,38 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-     public Cursor displayAllTrip() {
-        String query = "SELECT * FROM " + TABLE_TRIP;
-        SQLiteDatabase result = this.getReadableDatabase();
+     public Cursor displayAllTrip(String keySearch) {
 
-        Cursor cursor = null;
-        if (result != null){
-            cursor = result.rawQuery(query, null);
+        if (keySearch.length() == 0) {
+            String query = "SELECT * FROM " + TABLE_TRIP;
+            SQLiteDatabase result = this.getReadableDatabase();
+            Cursor cursor = null;
+            if (result != null){
+                cursor = result.rawQuery(query, null);
+            }
+            return cursor;
+        } else  {
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = null;
+                String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'";
+                cursor = db.rawQuery(query,null);
+            return cursor;
         }
+    }
+
+    @SuppressLint("Recycle")
+    public Cursor searchTrip(String keySearch) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] columns = {_ID,NAME,DESTINATION,DATE_OF_TRIP,REQUIRE_ASSESSMENT};
+        Cursor cursor = null;
+
+        if(keySearch != null && keySearch.length() > 0) {
+            String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'";
+            cursor = db.rawQuery(query,null);
+            return cursor;
+        }
+
+        cursor = db.query(TABLE_TRIP,columns,null,null,null,null,null);
         return cursor;
     }
 
@@ -115,5 +139,5 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     public void deleteAllTrip() {
         SQLiteDatabase exeDelete = this.getWritableDatabase();
         exeDelete.execSQL("DELETE FROM " + TABLE_TRIP);
-    };
+    }
 }
