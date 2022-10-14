@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +47,7 @@ public class HomeTripFragment extends Fragment  {
     MaterialToolbar toolbar;
     Button searchBtn;
     EditText keySearchTrip;
+    String keySearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,17 +77,25 @@ public class HomeTripFragment extends Fragment  {
         trip_date = new ArrayList<>();
         trip_assessment = new ArrayList<>();
 
-//        handleStoreDataInArrays();
-
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String key = keySearchTrip.getText().toString();
-                Log.i("Search key", key);
-                handleSearchTrip(key);
+                keySearch = keySearchTrip.getText().toString();
+                Intent intent = new Intent(HomeTripFragment.this.getActivity(), MainActivity.class);
+                intent.putExtra("key", keySearch);
+                startActivity(intent);
             }
         });
-//        getkeySearch();
+
+        keySearchTrip.setText((CharSequence) requireActivity().getIntent().getStringExtra("key"));
+
+        if (keySearchTrip.length() == 0) {
+            keySearch = keySearchTrip.getText().toString();
+            handleStoreDataInArrays(keySearch);
+        } else if (keySearchTrip.length() > 0 ) {
+            String key = keySearchTrip.getText().toString();
+            handleStoreDataInArrays(key);
+        }
 
         recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
@@ -123,8 +134,8 @@ public class HomeTripFragment extends Fragment  {
         return super.onOptionsItemSelected(item);
     }
 
-    public void handleStoreDataInArrays(){
-        Cursor cursor = ExpenseDB.displayAllTrip();
+    public void handleStoreDataInArrays(String key){
+        Cursor cursor = ExpenseDB.displayAllTrip(key);
         if (cursor.getCount() == 0) {
             Toast.makeText(this.getContext(), "No Data", Toast.LENGTH_SHORT).show();
         } else {
@@ -183,5 +194,12 @@ public class HomeTripFragment extends Fragment  {
             }
         });
         confirmAlert.create().show();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayoutApp, fragment);
+        fragmentTransaction.commit();
     }
 }

@@ -30,14 +30,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <EditText
         android:id="@+id/textTripNameFilter"
         android:layout_width="269dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="66dp"
         android:minHeight="48dp"
-        android:text="Search...."
+        android:drawablePadding="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/bg_search"
+        android:hint="Search...."
+        android:text=""
         android:inputType="text"
         android:importantForAutofill="no" />
 
