@@ -11,7 +11,7 @@
         layout="@layout/tool_bar_sub" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dropdownWorkingStatus"
+        android:id="@+id/dropdownType"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         tools:ignore="MissingConstraints">
 
         <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
+            android:id="@+id/type_auto_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -54,7 +54,7 @@
         app:helperTextTextColor="@color/red"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdownWorkingStatus"
+        app:layout_constraintTop_toBottomOf="@+id/dropdownType"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteY="96dp">
 
