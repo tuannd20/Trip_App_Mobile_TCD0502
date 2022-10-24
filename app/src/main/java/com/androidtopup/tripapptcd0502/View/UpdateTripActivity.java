@@ -1,6 +1,5 @@
 package com.androidtopup.tripapptcd0502.View;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,9 +61,11 @@ public class UpdateTripActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-               finish();
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
+        navigateExpensesScreen();
     }
 
     @Override
@@ -222,5 +223,22 @@ public class UpdateTripActivity extends AppCompatActivity {
             }
         });
         confirmAlert.create().show();
+    }
+
+    private void navigateExpensesScreen() {
+        view_expense_btn = findViewById(R.id.button_view_expenses);
+        view_expense_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UpdateTripActivity.this, ExpenseDetail.class);
+                intent.putExtra("trip_id", id);
+                intent.putExtra("trip_name", name);
+                intent.putExtra("trip_destination", destination);
+                intent.putExtra("trip_date", date);
+                intent.putExtra("trip_assessment", assessment);
+                intent.putExtra("trip_description", desc);
+                startActivity(intent);
+            }
+        });
     }
 }

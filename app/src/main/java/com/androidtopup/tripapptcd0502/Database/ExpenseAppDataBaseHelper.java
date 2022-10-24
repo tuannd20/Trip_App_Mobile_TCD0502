@@ -21,6 +21,15 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final String REQUIRE_ASSESSMENT= "requireAssessment";
     private static final String DESC = "description";
 
+    private static final String TABLE_EXPENSES = "EXPENSES";
+    private static final String ID = "id";
+    private static final String TRIP_ID = "trip_id";
+    private static final String TYPE = "type";
+    private static final String AMOUNT = "amount";
+    private static final String DATE_OF_EXPENSE = "dateOfExpense";
+
+
+
     private static final String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_TRIP + " ("
             + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + NAME + " TEXT NOT NULL, "
@@ -28,6 +37,14 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             + DATE_OF_TRIP + " TEXT, "
             + REQUIRE_ASSESSMENT + " TEXT, "
             + DESC + " TEXT);";
+
+    private static final String QUERY_CREATE_TABLE_EXPENSES = "CREATE TABLE " + TABLE_EXPENSES +" ("
+            + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TRIP_ID + " INTERGER, "
+            + TYPE + " TEXT, "
+            + AMOUNT + " TEXT, "
+            + DATE_OF_EXPENSE + " TEXT, "
+            + " FOREIGN KEY(" + TRIP_ID + ") REFERENCES " + TABLE_TRIP+"(" + _ID +"))";
 
 
     public ExpenseAppDataBaseHelper(Context context) {
@@ -38,11 +55,13 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(QUERY_CREATE_TABLE);
+        db.execSQL(QUERY_CREATE_TABLE_EXPENSES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS '" + TABLE_TRIP + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_EXPENSES + "'");
         onCreate(db);
     }
 
@@ -96,6 +115,16 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         }
 
         cursor = db.query(TABLE_TRIP,columns,null,null,null,null,null);
+        return cursor;
+    }
+
+    public Cursor getTripById(String id) {
+        Cursor cursor = null;
+        String query = "SELECT * FROM " + TABLE_TRIP + " WHERE " + _ID + " = " + id;
+        SQLiteDatabase result = this.getWritableDatabase();
+        if (result != null) {
+            cursor = result.rawQuery(query, null);
+        }
         return cursor;
     }
 

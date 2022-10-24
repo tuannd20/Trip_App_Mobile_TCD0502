@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -136,31 +135,6 @@ public class HomeTripFragment extends Fragment  {
         Cursor cursor = ExpenseDB.displayAllTrip(key);
         if (cursor.getCount() == 0) {
             Toast.makeText(this.getContext(), "No Data", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                trip_id.add(cursor.getString(0));
-                trip_name.add(cursor.getString(1));
-                trip_destination.add(cursor.getString(2));
-                trip_date.add(cursor.getString(3));
-                trip_assessment.add(cursor.getString(4));
-            }
-        }
-    }
-
-    private void getkeySearch() {
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                keySearchTrip.getText().toString().trim();
-                Log.i("Search key", String.valueOf(keySearchTrip));
-            }
-        });
-    }
-
-    private void handleSearchTrip(String key) {
-        Cursor cursor = ExpenseDB.searchTrip(key);
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this.getContext(), "Not Found", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
                 trip_id.add(cursor.getString(0));

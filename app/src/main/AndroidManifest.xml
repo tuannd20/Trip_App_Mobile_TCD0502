@@ -10,15 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TripAppTCD0502">
         <activity
-            android:label="New Trip"
-            android:parentActivityName=".View.MainActivity"
-            android:name=".View.AddTripActivity"
+            android:name=".View.AddExpense"
+            android:label="Add Expense"
+            android:parentActivityName=".View.ExpenseDetail"
             android:exported="true" />
         <activity
-            android:label="Update trip"
-            android:parentActivityName=".View.MainActivity"
+            android:name=".View.AddTripActivity"
+            android:exported="true"
+            android:label="New Trip"
+            android:parentActivityName=".View.MainActivity" />
+        <activity
             android:name=".View.UpdateTripActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Update trip"
+            android:parentActivityName=".View.MainActivity" />
+        <activity
+            android:name=".View.ExpenseDetail"
+            android:exported="true"
+            android:label="Expense trip"
+            android:parentActivityName=".View.UpdateTripActivity" />
         <activity
             android:name=".View.MainActivity"
             android:exported="true"
