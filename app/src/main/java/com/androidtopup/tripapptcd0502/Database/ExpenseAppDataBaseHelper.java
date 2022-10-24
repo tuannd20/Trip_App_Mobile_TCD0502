@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
-    private static final  int DATABASE_VERSION = 4;
+    private static final  int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "Expense_Management.db";
     private final Context context;
 
@@ -40,11 +40,11 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
 
     private static final String QUERY_CREATE_TABLE_EXPENSES = "CREATE TABLE " + TABLE_EXPENSES +" ("
             + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + TRIP_ID + " INTERGER, "
+            + TRIP_ID + " INTERGER NOT NULL, "
             + TYPE + " TEXT, "
             + AMOUNT + " TEXT, "
             + DATE_OF_EXPENSE + " TEXT, "
-            + " FOREIGN KEY(" + TRIP_ID + ") REFERENCES " + TABLE_TRIP+"(" + _ID +"))";
+            + " FOREIGN KEY (" + TRIP_ID + ") REFERENCES " + TABLE_TRIP+" (" + _ID +"))";
 
 
     public ExpenseAppDataBaseHelper(Context context) {
@@ -168,5 +168,23 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     public void deleteAllTrip() {
         SQLiteDatabase exeDelete = this.getWritableDatabase();
         exeDelete.execSQL("DELETE FROM " + TABLE_TRIP);
+    }
+
+    // Query of expense
+    public void createExpenses(int idTrip, String typOfExpense, String time, String amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TRIP_ID, idTrip);
+        values.put(TYPE, typOfExpense);
+        values.put(AMOUNT, amount);
+        values.put(DATE_OF_EXPENSE, time);
+
+        long result = db.insert(TABLE_EXPENSES, null, values);
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
     }
 }

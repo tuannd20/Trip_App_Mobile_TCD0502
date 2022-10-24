@@ -58,7 +58,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.tv_trip_name.setText(String.valueOf(trip_name.get(position)));
         holder.tv_trip_date.setText(String.valueOf(trip_date.get(position)));
         holder.tv_trip_destination.setText(String.valueOf(trip_destination.get(position)));
-        holder.tv_trip_assessment.setText(new StringBuilder().append(" Require Assessment: ")
+        holder.tv_trip_assessment.setText(new StringBuilder().append("Assessment: ")
                                                              .append(String.valueOf(trip_assessment.get(position))).toString());
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override

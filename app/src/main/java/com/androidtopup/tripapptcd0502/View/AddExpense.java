@@ -4,19 +4,23 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,13 +32,18 @@ public class AddExpense extends AppCompatActivity {
     MaterialToolbar toolbar;
     String  id, name, destination, date, assessment, desc;
 
+    TextInputLayout type;
+    TextInputLayout amount;
+    TextInputLayout time;
+    Button add_expense;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
 
-        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        autoCompleteTextView = findViewById(R.id.type_auto_tv);
         adapterItems = new ArrayAdapter<String>(AddExpense.this,R.layout.type_expense_item,types);
         autoCompleteTextView.setAdapter(adapterItems);
 
@@ -71,6 +80,7 @@ public class AddExpense extends AppCompatActivity {
             }
         });
         handleDateTrip();
+        handleAddExpense();
     }
 
     private void handleDateTrip() {
@@ -95,5 +105,30 @@ public class AddExpense extends AppCompatActivity {
         DateTimeFormatter formatDateOfTrip = DateTimeFormatter.ofPattern( "dd/MM/uuuu" ) ;
         String result = dot.format( formatDateOfTrip ) ;
         dobText.setText(result);
+    }
+
+    private void handleAddExpense() {
+        type = findViewById(R.id.dropdownType);
+        amount = findViewById(R.id.inputAmount);
+        time = findViewById(R.id.dateOfExpenseInput);
+        add_expense = findViewById(R.id.button_add_expense);
+        add_expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int tripId = Integer.parseInt(id);
+                final String strType = autoCompleteTextView.getText().toString();
+                final String strAmount = amount.getEditText().getText().toString().trim();
+                final String strTime = time.getEditText().getText().toString().trim();
+                Log.i("id", String.valueOf(tripId));
+                Log.i("type", String.valueOf(strType));
+
+                insertDataExpense(tripId, strType, strAmount, strTime);
+            }
+        });
+    }
+
+    private void insertDataExpense(int tripId, String type, String amount, String time) {
+        ExpenseAppDataBaseHelper db = new ExpenseAppDataBaseHelper(AddExpense.this);
+        db.createExpenses(tripId, type, amount, time);
     }
 }
