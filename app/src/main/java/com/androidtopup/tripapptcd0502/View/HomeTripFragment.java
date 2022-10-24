@@ -45,6 +45,8 @@ public class HomeTripFragment extends Fragment  {
     Button searchBtn;
     EditText keySearchTrip;
     String keySearch;
+    MenuItem icAddTrip;
+    String State;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,14 +60,14 @@ public class HomeTripFragment extends Fragment  {
         assert activity != null;
         activity.setSupportActionBar(toolbar);
 
-        add_button = view.findViewById((R.id.add_button));
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addTripScreen = new Intent(HomeTripFragment.this.getActivity(), AddTripActivity.class);
-                HomeTripFragment.this.startActivity(addTripScreen);
-            }
-        });
+//        add_button = view.findViewById((R.id.add_button));
+//        add_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent addTripScreen = new Intent(HomeTripFragment.this.getActivity(), AddTripActivity.class);
+//                HomeTripFragment.this.startActivity(addTripScreen);
+//            }
+//        });
 
         ExpenseDB = new ExpenseAppDataBaseHelper(context);
         trip_id = new ArrayList<>();
@@ -94,6 +96,22 @@ public class HomeTripFragment extends Fragment  {
             handleStoreDataInArrays(key);
         }
 
+        if (trip_id.toString().length() < 5) {
+            State = "HIDE_ITEM";
+            add_button = view.findViewById((R.id.add_button));
+            add_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent addTripScreen = new Intent(HomeTripFragment.this.getActivity(), AddTripActivity.class);
+                    HomeTripFragment.this.startActivity(addTripScreen);
+                }
+            });
+        } else if (trip_id.toString().length() >= 5) {
+            State = "SHOW_ITEM";
+            add_button = view.findViewById((R.id.add_button));
+            add_button.setVisibility(View.INVISIBLE);
+        }
+
         recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
                 trip_id, trip_name, trip_destination, trip_date, trip_assessment);
@@ -113,6 +131,14 @@ public class HomeTripFragment extends Fragment  {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.top_app_bar, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        String isShow = "SHOW_ITEM";
+        icAddTrip = menu.findItem(R.id.add);
+
+        if (State != isShow) {
+            icAddTrip.setVisible(false);
+        } else {
+            icAddTrip.setVisible(true);
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -123,11 +149,10 @@ public class HomeTripFragment extends Fragment  {
             case R.id.delete:
                 confirmDeleteAll();
                 return true;
-            case R.id.search:
-                Toast.makeText(context, "Search Successfully", Toast.LENGTH_SHORT).show();
+            case R.id.add:
+                handleNavigateScreen();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -149,7 +174,7 @@ public class HomeTripFragment extends Fragment  {
     private void confirmDeleteAll() {
         AlertDialog.Builder confirmAlert = new AlertDialog.Builder(HomeTripFragment.this.requireContext());
         confirmAlert.setTitle("Delete ");
-        confirmAlert.setMessage("Are you sure you want to delete ");
+        confirmAlert.setMessage("Are you sure you want to delete all data");
         confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -166,5 +191,10 @@ public class HomeTripFragment extends Fragment  {
             }
         });
         confirmAlert.create().show();
+    }
+
+    private void handleNavigateScreen() {
+        Intent screen = new Intent(HomeTripFragment.this.getActivity(), AddTripActivity.class);
+        startActivity(screen);
     }
 }

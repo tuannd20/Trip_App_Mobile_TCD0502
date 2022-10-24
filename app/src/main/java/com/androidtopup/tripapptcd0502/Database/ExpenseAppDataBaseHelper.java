@@ -170,6 +170,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         exeDelete.execSQL("DELETE FROM " + TABLE_TRIP);
     }
 
+    // =======================================================================
     // Query of expense
     public void createExpenses(int idTrip, String typOfExpense, String time, String amount) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -186,5 +187,16 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
         }
         db.close();
+    }
+
+    public Cursor readAllExpenseOfTrip(int tripId) {
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " WHERE " + TRIP_ID + " = " + tripId;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
     }
 }
