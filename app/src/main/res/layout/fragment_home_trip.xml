@@ -36,7 +36,7 @@
         android:id="@+id/textTripNameFilter"
         android:layout_width="269dp"
         android:layout_height="56dp"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="66dp"
         android:minHeight="48dp"
         android:drawablePadding="12dp"

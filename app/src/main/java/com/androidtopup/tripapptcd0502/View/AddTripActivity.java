@@ -1,9 +1,5 @@
 package com.androidtopup.tripapptcd0502.View;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +11,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
@@ -38,6 +39,7 @@ public class AddTripActivity extends AppCompatActivity {
 
     private Context context;
     MaterialToolbar toolbar;
+    TextView emptyAssessment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class AddTripActivity extends AppCompatActivity {
          date_of_trip_input =  findViewById(R.id.dateOfTripInput);
          description_input =  findViewById(R.id.inputDescription);
          add_trip = findViewById(R.id.button_add);
+         emptyAssessment = findViewById(R.id.risk_empty);
          add_trip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +87,15 @@ public class AddTripActivity extends AppCompatActivity {
                 final String strDate = date_of_trip_input.getEditText().getText().toString().trim();
                 final String strDescription = description_input.getEditText().getText().toString().trim();
                 final String value = getValueAssessment();
+
+                if (TextUtils.isEmpty(strName) && TextUtils.isEmpty(strDestination) && TextUtils.isEmpty(strDate) && value.matches("")) {
+                    name_input.setError("Name of trip is empty");
+                    destination_input.setError("Destination is empty");
+                    date_of_trip_input.setError("Date of trip is empty");
+                    emptyAssessment.setVisibility(View.VISIBLE);
+                    displayErrorAlert();
+                    return;
+                }
 
                 if  (TextUtils.isEmpty(strName)){
                     name_input.setError("Name of trip is empty");
@@ -99,6 +111,12 @@ public class AddTripActivity extends AppCompatActivity {
 
                 if  (TextUtils.isEmpty(strDate)){
                     date_of_trip_input.setError("Date of trip is empty");
+                    displayErrorAlert();
+                    return;
+                }
+
+                if (value.matches("")) {
+                    emptyAssessment.setVisibility(View.VISIBLE);
                     displayErrorAlert();
                     return;
                 }
@@ -173,7 +191,7 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     private void displayErrorAlert() {
-        new AlertDialog.Builder(this).setTitle("Details trip").setMessage(
+        new AlertDialog.Builder(this).setTitle("Error").setMessage(
                 "You need to fill all required fields"
         ).setPositiveButton("Close", new DialogInterface.OnClickListener() {
             @Override

@@ -1,9 +1,12 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +39,7 @@ public class AddExpense extends AppCompatActivity {
     TextInputLayout amount;
     TextInputLayout time;
     Button add_expense;
+    TextInputEditText amount_txt, time_txt;
 
 
     @Override
@@ -112,6 +116,8 @@ public class AddExpense extends AppCompatActivity {
         amount = findViewById(R.id.inputAmount);
         time = findViewById(R.id.dateOfExpenseInput);
         add_expense = findViewById(R.id.button_add_expense);
+        amount_txt = findViewById(R.id.amount_expense);
+        time_txt = findViewById(R.id.date_expense);
         add_expense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +128,32 @@ public class AddExpense extends AppCompatActivity {
                 Log.i("id", String.valueOf(tripId));
                 Log.i("type", String.valueOf(strType));
 
+                if (TextUtils.isEmpty(strType) && TextUtils.isEmpty(strAmount) && TextUtils.isEmpty(strTime)){
+                    autoCompleteTextView.setError("Not empty");
+                    amount_txt.setError("Not empty");
+                    time.setError("Time is not empty");
+                    displayErrorAlert();
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strType)){
+                    autoCompleteTextView.setError("Not empty");
+                    displayErrorAlert();
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strAmount)){
+                    amount_txt.setError("Not empty");
+                    displayErrorAlert();
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strTime)){
+                    time.setError("Time is not empty");
+                    displayErrorAlert();
+                    return;
+                }
+
                 insertDataExpense(tripId, strType, strAmount, strTime);
             }
         });
@@ -130,5 +162,16 @@ public class AddExpense extends AppCompatActivity {
     private void insertDataExpense(int tripId, String type, String amount, String time) {
         ExpenseAppDataBaseHelper db = new ExpenseAppDataBaseHelper(AddExpense.this);
         db.createExpenses(tripId, type, amount, time);
+    }
+
+    private void displayErrorAlert() {
+        new AlertDialog.Builder(this).setTitle("Error").setMessage(
+                "You need to fill all required fields"
+        ).setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 }
