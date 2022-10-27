@@ -1,21 +1,26 @@
 package com.androidtopup.tripapptcd0502.View;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
+import com.androidtopup.tripapptcd0502.Api.ApiService;
 import com.androidtopup.tripapptcd0502.R;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UploadCloudFragment extends Fragment {
 
@@ -25,7 +30,10 @@ public class UploadCloudFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_upload_cloud, container, false);
-        Data payload = new Data("SUCCESS", "wm123", 2, "Android Conference,Client Meeting", "successful upload – all done!");
+        List<DetailList> detailList = new ArrayList<>();
+        detailList.add(new DetailList("Mobile learning", "Test upload api"));
+
+        Data payload = new Data("test1234", detailList);
 
         Gson gson = new Gson();
         String jsonData = gson.toJson(payload);
@@ -49,5 +57,25 @@ public class UploadCloudFragment extends Fragment {
 
         Log.i("data", jsonData);
         return view;
+    }
+
+    private void sendJsonData() {
+        List<DetailList> detailList = new ArrayList<>();
+        detailList.add(new DetailList("Mobile learning", "Test upload api"));
+
+        Data payload = new Data("test1234", detailList);
+        ApiService.apiService.sendJsonData(payload).enqueue(new Callback<Data>() {
+            @Override
+            public void onResponse(Call<Data> call, Response<Data> response) {
+                Toast.makeText(UploadCloudFragment.this.getContext(), "Call Api well done", Toast.LENGTH_SHORT).show();
+
+                Data result = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Data> call, Throwable t) {
+                Toast.makeText(UploadCloudFragment.this.getContext(), "Call Api Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

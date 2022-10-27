@@ -1,58 +1,37 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import java.util.List;
+
 public class Data {
-    private String uploadResponseCode;
-
-    public String getUploadResponseCode() {
-        return uploadResponseCode;
-    }
-
-    public void setUploadResponseCode(String uploadResponseCode) {
-        this.uploadResponseCode = uploadResponseCode;
-    }
-
     private String userId;
-    private int number;
-    private String name;
-    private String message;
+    private List<DetailList> detailList;
 
-    public Data(String uploadResponseCode, String userId, int number, String name, String message) {
-        this.uploadResponseCode = uploadResponseCode;
+    public Data(String userId, List<DetailList> detailList) {
         this.userId = userId;
-        this.number = number;
-        this.name = name;
-        this.message = message;
+        this.detailList = detailList;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-    public String getNameUser() {
-        return name;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public List<DetailList> getDetailList() {
+        return detailList;
     }
 
-    public void setNameUser(String name) {
-        this.name = name;
+    public void setDetailList(List<DetailList> detailList) {
+        this.detailList = detailList;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    @Override
+    public String toString() {
+        return "Data{" +
+                "userId='" + userId + '\'' +
+                ", detailList=" + detailList +
+                '}';
     }
 }
