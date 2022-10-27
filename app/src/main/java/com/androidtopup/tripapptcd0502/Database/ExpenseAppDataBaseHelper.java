@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final  int DATABASE_VERSION = 15;
@@ -74,12 +73,13 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         values.put(REQUIRE_ASSESSMENT, assessment);
         values.put(DESC, desc);
 
-        long result = db.insert(TABLE_TRIP, null, values);
-        if (result == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
-        }
+        db.insert(TABLE_TRIP, null, values);
+//        long result = db.insert(TABLE_TRIP, null, values);
+//        if (result == -1) {
+//            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
+//        }
         db.close();
     }
 
@@ -147,22 +147,23 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         valueUpdate.put(REQUIRE_ASSESSMENT, assessment);
         valueUpdate.put(DESC, desc);
 
-        long result = db.update(TABLE_TRIP, valueUpdate, "_id=?", new String[]{trip_id});
-        if (result == -1) {
-            Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
-        }
+//        long result = db.update(TABLE_TRIP, valueUpdate, "_id=?", new String[]{trip_id});
+//        if (result == -1) {
+//            Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     public void deleteOneTripById(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long result = db.delete(TABLE_TRIP, "_id=?", new String[]{id});
-        if (result == -1) {
-            Toast.makeText(context, "Delete Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
-        }
+        db.delete(TABLE_TRIP, "_id=?", new String[]{id});
+//        long result = db.delete(TABLE_TRIP, "_id=?", new String[]{id});
+//        if (result == -1) {
+//            Toast.makeText(context, "Delete Failed", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     public void deleteAllTrip() {
@@ -180,12 +181,12 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         values.put(AMOUNT, amount);
         values.put(DATE_OF_EXPENSE, time);
 
-        long result = db.insert(TABLE_EXPENSES, null, values);
-        if (result == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
-        }
+//        long result = db.insert(TABLE_EXPENSES, null, values);
+//        if (result == -1) {
+//            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
+//        }
         db.close();
     }
 
