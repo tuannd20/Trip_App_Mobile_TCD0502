@@ -74,12 +74,6 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         values.put(DESC, desc);
 
         db.insert(TABLE_TRIP, null, values);
-//        long result = db.insert(TABLE_TRIP, null, values);
-//        if (result == -1) {
-//            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
-//        }
         db.close();
     }
 
@@ -96,7 +90,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         } else  {
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = null;
-                String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'";
+                String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'" + " OR " + DATE_OF_TRIP + " LIKE '%"+keySearch+"%'";
                 cursor = db.rawQuery(query,null);
             return cursor;
         }
@@ -109,7 +103,12 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
 
         if(keySearch != null && keySearch.length() > 0) {
-            String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'";
+            String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+NAME+" LIKE '%"+keySearch+"%'" + " OR " + DATE_OF_TRIP + " LIKE '%"+keySearch+"%'";
+            cursor = db.rawQuery(query,null);
+            return cursor;
+        }
+        if (keySearch == "Yes" || keySearch == "No" && keySearch.length() > 0) {
+            String query = "SELECT * FROM "+TABLE_TRIP+" WHERE "+REQUIRE_ASSESSMENT+" LIKE '%"+keySearch+"%'";
             cursor = db.rawQuery(query,null);
             return cursor;
         }
@@ -146,24 +145,11 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         valueUpdate.put(DATE_OF_TRIP, date);
         valueUpdate.put(REQUIRE_ASSESSMENT, assessment);
         valueUpdate.put(DESC, desc);
-
-//        long result = db.update(TABLE_TRIP, valueUpdate, "_id=?", new String[]{trip_id});
-//        if (result == -1) {
-//            Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     public void deleteOneTripById(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TRIP, "_id=?", new String[]{id});
-//        long result = db.delete(TABLE_TRIP, "_id=?", new String[]{id});
-//        if (result == -1) {
-//            Toast.makeText(context, "Delete Failed", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     public void deleteAllTrip() {
@@ -180,13 +166,6 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         values.put(TYPE, typOfExpense);
         values.put(AMOUNT, amount);
         values.put(DATE_OF_EXPENSE, time);
-
-//        long result = db.insert(TABLE_EXPENSES, null, values);
-//        if (result == -1) {
-//            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
-//        }
         db.close();
     }
 

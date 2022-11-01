@@ -14,8 +14,13 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/more"
-        android:title="More"
+        android:id="@+id/filterYes"
+        android:title="Yes"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filterNo"
+        android:title="No"
         app:showAsAction="never" />
 
 </menu>
