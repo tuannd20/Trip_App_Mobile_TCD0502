@@ -2,11 +2,11 @@ package com.androidtopup.tripapptcd0502.View;
 
 public class DetailList {
     private String name;
-    private String description;
+    private String otherDetails;
 
-    public DetailList(String name, String description) {
+    public DetailList(String name, String otherDetails) {
         this.name = name;
-        this.description = description;
+        this.otherDetails = otherDetails;
     }
 
     public String getName() {
@@ -17,11 +17,11 @@ public class DetailList {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getOtherDetails() {
+        return otherDetails;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOtherDetails(String otherDetails) {
+        this.otherDetails = otherDetails;
     }
 }

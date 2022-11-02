@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,27 +45,10 @@ public class UploadCloudFragment extends Fragment {
         Gson gson = new Gson();
         String jsonData = gson.toJson(payload);
 
-        AlertDialog.Builder confirmAlert = new AlertDialog.Builder(UploadCloudFragment.this.getContext());
-        confirmAlert.setTitle("Delete");
-        confirmAlert.setMessage(jsonData);
-        confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        confirmAlert.create().show();
-
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postData("Good123", "helolololololo");
+                postData("test1234", (ArrayList) detailList);
             }
         });
 
@@ -83,6 +67,23 @@ public class UploadCloudFragment extends Fragment {
                 Toast.makeText(UploadCloudFragment.this.getContext(), "Call Api well done", Toast.LENGTH_SHORT).show();
 
                 Data result = response.body();
+
+                AlertDialog.Builder confirmAlert = new AlertDialog.Builder(UploadCloudFragment.this.requireContext());
+                confirmAlert.setTitle("Upload Api");
+                confirmAlert.setMessage("uploadResponseCode: " + "\nuserId: " + result.getUserId() + "\ndetailList: " + result.getDetailList());
+                confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                confirmAlert.create().show();
             }
 
             @Override
@@ -92,26 +93,27 @@ public class UploadCloudFragment extends Fragment {
         });
     }
 
-    private void postData(String level, String desc) {
+    private void postData(String userId, ArrayList detailList) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://platform-gw.dev.smartdev.dev/")
+                .baseUrl("http://192.168.0.104:61421/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         HandleAPI retrofitAPI = retrofit.create(HandleAPI.class);
-        DetailList modal = new DetailList(level, desc);
+        Data jsonpayLoad = new Data(userId, detailList);
 
-        Call<DetailList> call = retrofitAPI.createPost(modal);
+        Call<Data> call = retrofitAPI.createPost(jsonpayLoad);
 
-        call.enqueue(new Callback<DetailList>() {
+        call.enqueue(new Callback<Data>() {
             @Override
-            public void onResponse(Call<DetailList> call, Response<DetailList> response) {
-                Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<Data> call, Response<Data> response) {
+//                Data result = response.body();
+                Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API Successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<DetailList> call, Throwable t) {
-                Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API Failed", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Data> call, Throwable t) {
+                Toast.makeText(UploadCloudFragment.this.getContext(), "API Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
