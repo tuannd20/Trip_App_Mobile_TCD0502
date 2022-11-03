@@ -152,6 +152,10 @@ public class HomeTripFragment extends Fragment  {
             case R.id.add:
                 handleNavigateScreen();
                 return true;
+            case R.id.filterYes:
+                return true;
+            case R.id.filterNo:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
