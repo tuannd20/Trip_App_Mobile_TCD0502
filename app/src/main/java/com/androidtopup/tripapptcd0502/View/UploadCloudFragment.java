@@ -1,6 +1,5 @@
 package com.androidtopup.tripapptcd0502.View;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.androidtopup.tripapptcd0502.Api.ApiService;
 import com.androidtopup.tripapptcd0502.Api.HandleAPI;
 import com.androidtopup.tripapptcd0502.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,12 +34,13 @@ public class UploadCloudFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_upload_cloud, container, false);
         List<DetailList> detailList = new ArrayList<>();
         detailList.add(new DetailList("Mobile learning", "Test upload api"));
+        detailList.add(new DetailList("Android learning", "Demo upload api"));
         buttonUpload = view.findViewById(R.id.buttonUpload);
 
-        Data payload = new Data("test1234", detailList);
-
-        Gson gson = new Gson();
-        String jsonData = gson.toJson(payload);
+//        Data payload = new Data("test1234", detailList);
+//
+//        Gson gson = new Gson();
+//        String jsonData = gson.toJson(payload);
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,45 +49,8 @@ public class UploadCloudFragment extends Fragment {
             }
         });
 
-        Log.i("data", jsonData);
+//        Log.i("data", jsonData);
         return view;
-    }
-
-    private void sendJsonData() {
-        List<DetailList> detailList = new ArrayList<>();
-        detailList.add(new DetailList("Mobile learning", "Test upload api"));
-
-        Data payload = new Data("test1234", detailList);
-        ApiService.apiService.sendJsonData(payload).enqueue(new Callback<Data>() {
-            @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                Toast.makeText(UploadCloudFragment.this.getContext(), "Call Api well done", Toast.LENGTH_SHORT).show();
-
-                Data result = response.body();
-
-                AlertDialog.Builder confirmAlert = new AlertDialog.Builder(UploadCloudFragment.this.requireContext());
-                confirmAlert.setTitle("Upload Api");
-                confirmAlert.setMessage("uploadResponseCode: " + "\nuserId: " + result.getUserId() + "\ndetailList: " + result.getDetailList());
-                confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                confirmAlert.create().show();
-            }
-
-            @Override
-            public void onFailure(Call<Data> call, Throwable t) {
-                Toast.makeText(UploadCloudFragment.this.getContext(), "Call Api Failed", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void postData(String userId, ArrayList detailList) {
@@ -101,14 +61,27 @@ public class UploadCloudFragment extends Fragment {
 
         HandleAPI retrofitAPI = retrofit.create(HandleAPI.class);
         Data jsonpayLoad = new Data(userId, detailList);
+        Log.i("String 01111111111111111111111111", String.valueOf(jsonpayLoad));
+
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(jsonpayLoad);
+        Log.i("String 02", String.valueOf(jsonData));
 
         Call<Data> call = retrofitAPI.createPost(jsonpayLoad);
+        Log.i("Data when call APIIIIIIIIII", String.valueOf(jsonpayLoad));
 
         call.enqueue(new Callback<Data>() {
             @Override
             public void onResponse(Call<Data> call, Response<Data> response) {
 //                Data result = response.body();
+//                Log.i("data resssssss", String.valueOf(response.body()));
                 Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API Successfully", Toast.LENGTH_SHORT).show();
+
+                if (response.body() == null) {
+                    Log.i("data response", "null");
+                }
+//                Data result = response.body();
+//                Log.i("data response", result.user);
             }
 
             @Override

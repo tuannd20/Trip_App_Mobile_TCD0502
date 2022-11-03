@@ -1,10 +1,23 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Data {
+    @SerializedName("uploadResponseCode")
+    private String uploadResponseCode;
+    @SerializedName("userId")
     private String userId;
+    @SerializedName("detailList")
     private List<DetailList> detailList;
+    @SerializedName("number")
+    private int number;
+    @SerializedName("names")
+    private String names;
+    @SerializedName("message")
+    private String message;
+
 
     public Data(String userId, List<DetailList> detailList) {
         this.userId = userId;
@@ -27,11 +40,4 @@ public class Data {
         this.detailList = detailList;
     }
 
-    @Override
-    public String toString() {
-        return "Data{" +
-                "userId='" + userId + '\'' +
-                ", detailList=" + detailList +
-                '}';
-    }
 }
