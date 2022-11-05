@@ -145,6 +145,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         valueUpdate.put(DATE_OF_TRIP, date);
         valueUpdate.put(REQUIRE_ASSESSMENT, assessment);
         valueUpdate.put(DESC, desc);
+        db.update(TABLE_TRIP, valueUpdate, "_id=?", new String[]{trip_id});
     }
 
     public void deleteOneTripById(String id) {
@@ -166,6 +167,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         values.put(TYPE, typOfExpense);
         values.put(AMOUNT, amount);
         values.put(DATE_OF_EXPENSE, time);
+        db.insert(TABLE_EXPENSES, null, values);
         db.close();
     }
 
