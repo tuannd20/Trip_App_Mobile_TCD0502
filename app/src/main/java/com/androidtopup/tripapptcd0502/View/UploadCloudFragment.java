@@ -45,45 +45,38 @@ public class UploadCloudFragment extends Fragment {
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postData("test1234", (ArrayList) detailList);
+                postData("test1234", detailList);
             }
         });
-
-//        Log.i("data", jsonData);
         return view;
     }
 
-    private void postData(String userId, ArrayList detailList) {
+    private void postData(String userId, List<DetailList> detailList) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.104:61421/")
+                .baseUrl("https://cw1-app.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         HandleAPI retrofitAPI = retrofit.create(HandleAPI.class);
         Data jsonpayLoad = new Data(userId, detailList);
-        Log.i("String 01111111111111111111111111", String.valueOf(jsonpayLoad));
 
         Gson gson = new Gson();
         String jsonData = gson.toJson(jsonpayLoad);
-        Log.i("String 02", String.valueOf(jsonData));
+        Log.i("String 02", jsonData);
 
-        Call<Data> call = retrofitAPI.createPost(jsonpayLoad);
-        Log.i("Data when call APIIIIIIIIII", String.valueOf(jsonpayLoad));
+        Call<Data> call = retrofitAPI.createPost(jsonData);
 
         call.enqueue(new Callback<Data>() {
             @Override
             public void onResponse(Call<Data> call, Response<Data> response) {
-//                Data result = response.body();
-//                Log.i("data resssssss", String.valueOf(response.body()));
                 Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API Successfully", Toast.LENGTH_SHORT).show();
 
-                if (response.body() == null) {
-                    Log.i("data response", "null");
+                Data responseFromAPI = response.body();
+                if (responseFromAPI != null) {
+                    Log.i("data response", String.valueOf(response.body().getUserId()));
+                    Log.i("data response", String.valueOf(response.body().getUploadResponseCode()));
                 }
-//                Data result = response.body();
-//                Log.i("data response", result.user);
             }
-
             @Override
             public void onFailure(Call<Data> call, Throwable t) {
                 Toast.makeText(UploadCloudFragment.this.getContext(), "API Failed", Toast.LENGTH_SHORT).show();
