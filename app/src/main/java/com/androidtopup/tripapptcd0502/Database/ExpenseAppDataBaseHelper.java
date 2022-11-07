@@ -77,6 +77,16 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Cursor displayAllTripToUploadApi() {
+        String query = "SELECT * FROM " + TABLE_TRIP;
+        SQLiteDatabase result = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (result != null){
+            cursor = result.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
      public Cursor displayAllTrip(String keySearch) {
 
         if (keySearch.length() == 0) {
