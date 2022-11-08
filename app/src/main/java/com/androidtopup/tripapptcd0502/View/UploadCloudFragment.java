@@ -2,8 +2,6 @@ package com.androidtopup.tripapptcd0502.View;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import androidx.appcompat.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.androidtopup.tripapptcd0502.Api.HandleAPI;
@@ -45,7 +44,6 @@ public class UploadCloudFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_upload_cloud, container, false);
         context = view.getContext();
         userId = view.findViewById(R.id.inputUserId);
-//        final String strUserId = userId.getEditText().getText().toString().trim();
 
         trip_name = new ArrayList<>();
         trip_destination = new ArrayList<>();
@@ -56,21 +54,25 @@ public class UploadCloudFragment extends Fragment {
 
         List<DetailList> detailList = new ArrayList<>();
         List<DetailList.OtherDetails> otherDetails = new ArrayList<>();
+
         otherDetails.add(new DetailList.OtherDetails(trip_destination.toString(), trip_date.toString()));
-        detailList.add(new DetailList(trip_name.toString(), otherDetails));
-//        detailList.add(new DetailList("Android learning", "Demo upload api", "20/02/2001"));
+
+        for(String nameTrip: trip_name) {
+            detailList.add(new DetailList(nameTrip, otherDetails));
+        }
         buttonUpload = view.findViewById(R.id.buttonUpload);
 
 //        Data payload = new Data("test1234", detailList);
-//
 //        Gson gson = new Gson();
 //        String jsonData = gson.toJson(detailList);
+
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(detailList);
+        Log.i("Đaaddadada", jsonData);
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                final String strUserId = userId.getEditText().getText().toString().trim();
-//                postData(strUserId, detailList);
                 final String strUserId = userId.getEditText().getText().toString().trim();
                 Gson gson = new Gson();
                 String jsonData = gson.toJson(detailList);
