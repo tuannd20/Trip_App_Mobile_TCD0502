@@ -10,7 +10,9 @@
     <string name="label_input_description">Description</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="home_blank_fragment">Home fragment</string>
-    <string name="upload_blank_fragment">Upload fragment</string>
+    <string name="upload_blank_fragment">Upload data</string>
     <string name="page_title">Home</string>
     <string name="none_text"> </string>
+    <string name="label_input_user_id">User ID</string>
+
 </resources>
