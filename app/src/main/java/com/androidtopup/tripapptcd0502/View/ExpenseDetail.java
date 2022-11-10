@@ -163,7 +163,6 @@ public class ExpenseDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Toast.makeText(ExpenseDetail.this, "Yes", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -171,7 +170,6 @@ public class ExpenseDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Toast.makeText(ExpenseDetail.this, "No", Toast.LENGTH_SHORT).show();
             }
         });
 
