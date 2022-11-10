@@ -8,16 +8,15 @@
 
     <Button
         android:id="@+id/buttonUpload"
-        android:layout_width="wrap_content"
+        android:layout_width="173dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
         android:layout_gravity="center"
-        android:text="Button" />
-
-    <include
-        layout="@layout/tool_bar" />
+        android:layout_marginTop="240dp"
+        android:text="Upload" />
 
     <!-- TODO: Update blank fragment layout -->
+    <include layout="@layout/tool_bar" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

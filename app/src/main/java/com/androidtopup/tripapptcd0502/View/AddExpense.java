@@ -6,8 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -15,16 +14,19 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
@@ -36,8 +38,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
 
 public class AddExpense extends AppCompatActivity {
     String[] types = {"Food", "Transport", "Travel", "Service", "Hotel"};
@@ -65,6 +65,11 @@ public class AddExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
 
+//        WebView web_view = findViewById(R.id.mapWebView);
+//
+//        final ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("Loading Data...");
+//        progressDialog.setCancelable(false);
         autoCompleteTextView = findViewById(R.id.type_auto_tv);
         adapterItems = new ArrayAdapter<String>(AddExpense.this,R.layout.type_expense_item,types);
         autoCompleteTextView.setAdapter(adapterItems);
@@ -101,6 +106,23 @@ public class AddExpense extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+//        web_view.requestFocus();
+//        web_view.getSettings().setLightTouchEnabled(true);
+//        web_view.getSettings().setJavaScriptEnabled(true);
+//        web_view.getSettings().setGeolocationEnabled(true);
+//        web_view.loadUrl("https://mylocation.org/");
+//        web_view.setWebChromeClient(new WebChromeClient() {
+//            public void onProgressChanged(WebView view, int progress) {
+//                if (progress < 100) {
+//                    progressDialog.show();
+//                }
+//                if (progress == 100) {
+//                    progressDialog.dismiss();
+//                }
+//            }
+//        });
+
         handleDateTrip();
         handleAddExpense();
     }
@@ -192,9 +214,9 @@ public class AddExpense extends AppCompatActivity {
                         Toast.makeText(AddExpense.this, "Unable to find location.", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 insertDataExpense(tripId, strType, strAmount, strTime);
-                displayDataAlert(strType, strAmount, strTime);
+//                displayDataAlert(strType, strAmount, strTime);
+                showSuccessDialog();
             }
         });
     }
@@ -237,27 +259,32 @@ public class AddExpense extends AppCompatActivity {
         }).show();
     }
 
-    private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                AddExpense.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                AddExpense.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-//            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            LocationManager locationManager = (LocationManager)
-                    getSystemService(Context.LOCATION_SERVICE);
-            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (locationGPS != null) {
-                double lat = locationGPS.getLatitude();
-                double longi = locationGPS.getLongitude();
-                latitude = String.valueOf(lat);
-                longitude = String.valueOf(longi);
-                showLocation.setText("Your Location: " +  "Latitude: " + latitude + "Longitude: " + longitude);
-                Log.i("dadadadaadad", latitude);
-                Log.i("dadadadaadad", longitude);
-            } else {
-                Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+    private void showSuccessDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddExpense.this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(AddExpense.this).inflate(
+                R.layout.layout_success_dailog,
+                (ConstraintLayout)findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText(getResources().getString(R.string.success_title));
+        ((TextView) view.findViewById(R.id.textMessage)).setText(getResources().getString(R.string.dummy_text));
+        ((Button) view.findViewById(R.id.buttonSuccess)).setText(getResources().getString(R.string.okay));
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.done);
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonSuccess).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Toast.makeText(AddExpense.this, "Success", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
+        alertDialog.show();
+
     }
 }

@@ -2,16 +2,21 @@ package com.androidtopup.tripapptcd0502.View;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -106,11 +111,20 @@ public class ExpenseDetail extends AppCompatActivity {
     private void getAllExpenseByTripId(int tripId) {
         Cursor cursor = ExpenseDB.readAllExpenseOfTrip(tripId);
         if (cursor.getCount() == 0) {
-            Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+//            AlertDialog.Builder confirmAlert = new AlertDialog.Builder(ExpenseDetail.this);
+//            confirmAlert.setTitle("Expense");
+//            confirmAlert.setMessage("The trip do not have expense");
+//            confirmAlert.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    dialogInterface.dismiss();
+//                }
+//            }).show();
+            showWarningDialog();
         } else {
             while (cursor.moveToNext()) {
                 String idExpense = cursor.getString(0);
-                Log.i("Dataaaaaaaaaaaa", idExpense);
                 expense_id.add(idExpense);
                 expense_type.add(cursor.getString(2));
                 expense_amount.add(cursor.getString(4));
@@ -128,5 +142,42 @@ public class ExpenseDetail extends AppCompatActivity {
         addExpenseScreen.putExtra("trip_assessment", assessment);
         addExpenseScreen.putExtra("trip_description", desc);
         startActivity(addExpenseScreen);
+    }
+
+    private void showWarningDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseDetail.this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(ExpenseDetail.this).inflate(
+                R.layout.layout_warning_dailog,
+                (ConstraintLayout)findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText(getResources().getString(R.string.warning_title));
+        ((TextView) view.findViewById(R.id.textMessage)).setText(getResources().getString(R.string.dummy_text));
+        ((Button) view.findViewById(R.id.buttonYes)).setText(getResources().getString(R.string.yes));
+        ((Button) view.findViewById(R.id.buttonNo)).setText(getResources().getString(R.string.no));
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.warning);
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonYes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Toast.makeText(ExpenseDetail.this, "Yes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        view.findViewById(R.id.buttonNo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Toast.makeText(ExpenseDetail.this, "No", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
     }
 }

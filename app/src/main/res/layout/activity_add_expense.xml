@@ -8,7 +8,9 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/tool_bar_sub" />
+        layout="@layout/tool_bar_sub"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="266dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dropdownType"
@@ -23,9 +25,9 @@
         app:helperText="Required*"
         app:helperTextEnabled="true"
         app:helperTextTextColor="@color/red"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <AutoCompleteTextView
@@ -34,36 +36,36 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
-            android:textStyle="bold"
-            android:text="@string/none_text" />
+            android:text="@string/none_text"
+            android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputAmount"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginStart="32dp"
         android:layout_marginTop="218dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/label_input_amount"
         android:textStyle="bold"
-        app:placeholderText="VND"
         app:helperText="Required*"
         app:helperTextEnabled="true"
         app:helperTextTextColor="@color/red"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dropdownType"
         app:layout_constraintTop_toTopOf="parent"
+        app:placeholderText="VND"
         tools:layout_editor_absoluteY="96dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/amount_expense"
             android:layout_width="match_parent"
-            android:textSize="16sp"
+            android:layout_height="wrap_content"
             android:inputType="number|numberSigned"
-            android:layout_height="wrap_content" />
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -94,19 +96,31 @@
 
     <Button
         android:id="@+id/button_add_expense"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="358dp"
         android:layout_height="55dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="228dp"
         android:background="@drawable/border_button"
-        android:textColor="@color/white"
         android:text="ADD"
+        android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"
         app:backgroundTint="@color/purple_700"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.603"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateOfExpenseInput" />
+
+<!--    <WebView-->
+<!--        android:id="@+id/mapWebView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="186dp"-->
+<!--        android:layout_marginStart="32dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/dateOfExpenseInput" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
