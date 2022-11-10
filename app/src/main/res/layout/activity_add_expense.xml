@@ -62,6 +62,7 @@
             android:id="@+id/amount_expense"
             android:layout_width="match_parent"
             android:textSize="16sp"
+            android:inputType="number|numberSigned"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 

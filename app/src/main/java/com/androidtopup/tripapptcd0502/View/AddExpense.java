@@ -1,8 +1,15 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -13,10 +20,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
@@ -27,6 +36,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
 
 public class AddExpense extends AppCompatActivity {
     String[] types = {"Food", "Transport", "Travel", "Service", "Hotel"};
@@ -40,6 +51,13 @@ public class AddExpense extends AppCompatActivity {
     TextInputLayout time;
     Button add_expense;
     TextInputEditText amount_txt, time_txt;
+
+    private static final int REQUEST_LOCATION = 1;
+    TextView showLocation;
+    LocationManager locationManager;
+    String latitude, longitude;
+
+    String location;
 
 
     @Override
@@ -154,7 +172,29 @@ public class AddExpense extends AppCompatActivity {
                     return;
                 }
 
+                if (ActivityCompat.checkSelfPermission(
+                        AddExpense.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        AddExpense.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(AddExpense.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+                } else {
+                    LocationManager locationManager = (LocationManager)
+                            getSystemService(Context.LOCATION_SERVICE);
+                    Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (locationGPS != null) {
+                        double lat = locationGPS.getLatitude();
+                        double longi = locationGPS.getLongitude();
+                        latitude = String.valueOf(lat);
+                        longitude = String.valueOf(longi);
+                        showLocation.setText("Your Location: " +  "Latitude: " + latitude + "Longitude: " + longitude);
+                        Log.i("dadadadaadad", latitude);
+                        Log.i("dadadadaadad", longitude);
+                    } else {
+                        Toast.makeText(AddExpense.this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
                 insertDataExpense(tripId, strType, strAmount, strTime);
+                displayDataAlert(strType, strAmount, strTime);
             }
         });
     }
@@ -173,5 +213,51 @@ public class AddExpense extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         }).show();
+    }
+
+    private void displayDataAlert(String Type,
+                                  String Amount,
+                                  String Time) {
+        new AlertDialog.Builder(this).setTitle("Details trip").setMessage(
+                "\nType: " + Type +
+                        "\nAmount: " + Amount +
+                        "\nTime: " + Time
+        ).setPositiveButton("Back", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(AddExpense.this, ExpenseDetail.class);
+                intent.putExtra("trip_id", id);
+                intent.putExtra("trip_name", name);
+                intent.putExtra("trip_destination", destination);
+                intent.putExtra("trip_date", date);
+                intent.putExtra("trip_assessment", assessment);
+                intent.putExtra("trip_description", desc);
+                startActivity(intent);
+            }
+        }).show();
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                AddExpense.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                AddExpense.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+//            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            LocationManager locationManager = (LocationManager)
+                    getSystemService(Context.LOCATION_SERVICE);
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = String.valueOf(lat);
+                longitude = String.valueOf(longi);
+                showLocation.setText("Your Location: " +  "Latitude: " + latitude + "Longitude: " + longitude);
+                Log.i("dadadadaadad", latitude);
+                Log.i("dadadadaadad", longitude);
+            } else {
+                Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
