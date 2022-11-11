@@ -1,24 +1,29 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
@@ -32,6 +37,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class UpdateTripActivity extends AppCompatActivity {
+
     TextInputLayout name_input;
     TextInputLayout destination_input;
     TextInputLayout date_of_trip_input;
@@ -78,7 +84,7 @@ public class UpdateTripActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete) {
-            confirmDelete();
+            showWarningDialogDeleteAllTrip();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -100,9 +106,27 @@ public class UpdateTripActivity extends AppCompatActivity {
                 final String strDescription = description_input.getEditText().getText().toString().trim();
                 final String value = getValueAssessment();
 
-                updateDataOfTrip(id, strName, strDestination, strDate, value, strDescription);
-                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
-                startActivity(intent);
+                if (TextUtils.isEmpty(strName) && TextUtils.isEmpty(strDestination) && TextUtils.isEmpty(strDate) && value.matches("")) {
+                    name_input.setError("Name of trip is empty");
+                    destination_input.setError("Destination is empty");
+                    date_of_trip_input.setError("Date of trip is empty");
+                    showErrorInvalidDialog();
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strName)){
+                    name_input.setError("Name of trip is empty");
+                    showErrorInvalidDialog();
+                    return;
+                }
+
+                if  (TextUtils.isEmpty(strDestination)){
+                    destination_input.setError("Destination is empty");
+                    showErrorInvalidDialog();
+                    return;
+                }
+
+                showConfirmDataDialog(id, strName, strDestination, strDate, value, strDescription);
             }
         });
     }
@@ -120,9 +144,6 @@ public class UpdateTripActivity extends AppCompatActivity {
                 destination = getIntent().getStringExtra("destination");
                 date = getIntent().getStringExtra("date");
                 assessment = getIntent().getStringExtra("assessment");
-                Log.i("id: ", id);
-                Log.i("date: ", date);
-                Log.i("assessment: ", assessment);
 
                 Cursor cursor = ExpenseDB.getDescriptionById(id);
                 if(cursor.moveToFirst()){
@@ -140,7 +161,6 @@ public class UpdateTripActivity extends AppCompatActivity {
                        String date_update, String assessment_update, String desc_update) {
         rb_yes = findViewById(R.id.rb_yes_update);
         rb_no = findViewById(R.id.rb_no_update);
-        Log.i("Value: ", assessment_update);
 
         Objects.requireNonNull(name_input.getEditText()).setText(name_update);
         Objects.requireNonNull(destination_input.getEditText()).setText(destination_update);
@@ -203,28 +223,6 @@ public class UpdateTripActivity extends AppCompatActivity {
         return valueAssessment;
     }
 
-    private void confirmDelete() {
-        AlertDialog.Builder confirmAlert = new AlertDialog.Builder(this);
-        confirmAlert.setTitle("Delete " + name + " ?");
-        confirmAlert.setMessage("Are you sure you want to delete " + name + " ?");
-        confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
-                ExpenseDB.deleteOneTripById(id);
-                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        confirmAlert.create().show();
-    }
-
     private void navigateExpensesScreen() {
         view_expense_btn = findViewById(R.id.button_view_expenses);
         view_expense_btn.setOnClickListener(new View.OnClickListener() {
@@ -240,5 +238,116 @@ public class UpdateTripActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showConfirmDataDialog(String id, String name,
+                                       String destination,
+                                       String date,
+                                       String assessment,
+                                       String description){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateTripActivity.this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(UpdateTripActivity.this).inflate(
+                R.layout.layout_confirm_dailog,
+                (ConstraintLayout)findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText("Confirm to update trip");
+        ((TextView) view.findViewById(R.id.textMessage)).setText("\nName: " + name +
+                "\nDestination: " + destination +
+                "\nDate of trip: " + date +
+                "\nRequire Assessment: " + assessment +
+                "\nDescription: " + description);
+        ((Button) view.findViewById(R.id.buttonYes)).setText("Submit");
+        ((Button) view.findViewById(R.id.buttonNo)).setText("Cancel");
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.ic_action_name);
+
+        final android.app.AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonYes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateDataOfTrip(id, name, destination, date, assessment, description);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        view.findViewById(R.id.buttonNo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
+    }
+
+    private void showErrorInvalidDialog(){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UpdateTripActivity.this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(UpdateTripActivity.this).inflate(
+                R.layout.layout_error_dailog,
+                (ConstraintLayout)findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText("Invalid Data");
+        ((TextView) view.findViewById(R.id.textMessage)).setText("You need to fill all required fields");
+        ((Button) view.findViewById(R.id.buttonAction)).setText("Close");
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.error);
+
+        final android.app.AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonAction).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
+    }
+
+    public void showWarningDialogDeleteAllTrip(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(UpdateTripActivity.this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(UpdateTripActivity.this).inflate(
+                R.layout.layout_warning_dailog,
+                (ConstraintLayout)findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText("Delete " + name + " ?");
+        ((TextView) view.findViewById(R.id.textMessage)).setText("Are you sure you want to delete trip");
+        ((Button) view.findViewById(R.id.buttonYes)).setText(getResources().getString(R.string.yes));
+        ((Button) view.findViewById(R.id.buttonNo)).setText(getResources().getString(R.string.no));
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.warning);
+
+        final AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonYes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExpenseDB = new ExpenseAppDataBaseHelper(UpdateTripActivity.this);
+                ExpenseDB.deleteOneTripById(id);
+                Intent intent = new Intent(UpdateTripActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        view.findViewById(R.id.buttonNo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
     }
 }

@@ -16,7 +16,7 @@
     <string name="label_input_user_id">User ID</string>
 
 
-    <string name="success_title">Success Title</string>
+    <string name="success_title">Add Expense Success</string>
     <string name="warning_title">Warning Title</string>
     <string name="error_title">Error Title</string>
     <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>

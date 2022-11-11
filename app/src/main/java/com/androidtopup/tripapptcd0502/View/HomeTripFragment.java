@@ -2,7 +2,6 @@ package com.androidtopup.tripapptcd0502.View;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,7 +42,7 @@ public class HomeTripFragment extends Fragment  {
 
     Context context;
     ExpenseAppDataBaseHelper ExpenseDB;
-    ArrayList<String> trip_id, trip_name, trip_destination, trip_date, trip_assessment;
+    ArrayList<String> id, name, destination, date, assessment;
     TripAdapter tripAdapter;
     MaterialToolbar toolbar;
     Button searchBtn;
@@ -67,11 +65,11 @@ public class HomeTripFragment extends Fragment  {
         activity.setSupportActionBar(toolbar);
 
         ExpenseDB = new ExpenseAppDataBaseHelper(context);
-        trip_id = new ArrayList<>();
-        trip_name = new ArrayList<>();
-        trip_destination = new ArrayList<>();
-        trip_date = new ArrayList<>();
-        trip_assessment = new ArrayList<>();
+        id = new ArrayList<>();
+        name = new ArrayList<>();
+        destination = new ArrayList<>();
+        date = new ArrayList<>();
+        assessment = new ArrayList<>();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +91,7 @@ public class HomeTripFragment extends Fragment  {
             handleStoreDataInArrays(key);
         }
 
-        if (trip_id.toString().length() < 5) {
+        if (id.toString().length() < 5) {
             State = "HIDE_ITEM";
             add_button = view.findViewById((R.id.add_button));
             add_button.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +101,7 @@ public class HomeTripFragment extends Fragment  {
                     HomeTripFragment.this.startActivity(addTripScreen);
                 }
             });
-        } else if (trip_id.toString().length() >= 5) {
+        } else if (id.toString().length() >= 5) {
             State = "SHOW_ITEM";
             add_button = view.findViewById((R.id.add_button));
             add_button.setVisibility(View.INVISIBLE);
@@ -111,7 +109,7 @@ public class HomeTripFragment extends Fragment  {
 
         recyclerView = view.findViewById(R.id.recyclerViewTrip);
         tripAdapter = new TripAdapter(HomeTripFragment.this.getActivity(), HomeTripFragment.this.getActivity(),
-                trip_id, trip_name, trip_destination, trip_date, trip_assessment);
+                id, name, destination, date, assessment);
         recyclerView.setAdapter(tripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeTripFragment.this.getActivity()));
 
@@ -161,11 +159,11 @@ public class HomeTripFragment extends Fragment  {
             Log.i("No data", "NOdata");
         } else {
             while (cursor.moveToNext()) {
-                trip_id.add(cursor.getString(0));
-                trip_name.add(cursor.getString(1));
-                trip_destination.add(cursor.getString(2));
-                trip_date.add(cursor.getString(3));
-                trip_assessment.add(cursor.getString(4));
+                id.add(cursor.getString(0));
+                name.add(cursor.getString(1));
+                destination.add(cursor.getString(2));
+                date.add(cursor.getString(3));
+                assessment.add(cursor.getString(4));
             }
         }
     }

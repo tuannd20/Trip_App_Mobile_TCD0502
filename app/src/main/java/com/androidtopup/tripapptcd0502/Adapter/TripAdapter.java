@@ -21,27 +21,27 @@ import java.util.ArrayList;
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> {
 
     private Context context;
-    private final ArrayList trip_id;
-    private final ArrayList trip_name;
-    private final ArrayList trip_destination;
-    private final ArrayList trip_date;
-    private final ArrayList trip_assessment;
+    private final ArrayList id;
+    private final ArrayList name;
+    private final ArrayList destination;
+    private final ArrayList date;
+    private final ArrayList assessment;
     Activity activity;
 
-    public TripAdapter(Context context,
-                       Activity activity,
+    public TripAdapter(Context _context,
+                       Activity _activity,
                        ArrayList _id,
                        ArrayList _name,
                        ArrayList _destination,
                        ArrayList _date,
                        ArrayList _assessment) {
-        this.context = context;
-        this.activity = activity;
-        this.trip_id = _id;
-        this.trip_name = _name;
-        this.trip_destination = _destination;
-        this.trip_date = _date;
-        this.trip_assessment = _assessment;
+        this.context = _context;
+        this.activity = _activity;
+        this.id = _id;
+        this.name = _name;
+        this.destination = _destination;
+        this.date = _date;
+        this.assessment = _assessment;
     }
 
     @NonNull
@@ -54,23 +54,22 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TripAdapter.TripViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.tv_trip_id.setText(String.valueOf(trip_id.get(position)));
-        holder.tv_trip_name.setText(String.valueOf(trip_name.get(position)));
-        holder.tv_trip_date.setText(String.valueOf(trip_date.get(position)));
-        holder.tv_trip_destination.setText(String.valueOf(trip_destination.get(position)));
+        holder.tv_trip_id.setText(String.valueOf(id.get(position)));
+        holder.tv_trip_name.setText(String.valueOf(name.get(position)));
+        holder.tv_trip_date.setText(String.valueOf(date.get(position)));
+        holder.tv_trip_destination.setText(String.valueOf(destination.get(position)));
         holder.tv_trip_assessment.setText(new StringBuilder().append("Assessment: ")
-                                                             .append(String.valueOf(trip_assessment.get(position))).toString());
+                                                             .append(assessment.get(position)).toString());
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent updateTripScreen = new Intent(context, UpdateTripActivity.class);
-                updateTripScreen.putExtra("id", String.valueOf(trip_id.get(position)));
-                updateTripScreen.putExtra("name", String.valueOf(trip_name.get(position)));
-                updateTripScreen.putExtra("destination", String.valueOf(trip_destination.get(position)));
-                updateTripScreen.putExtra("date", String.valueOf(trip_date.get(position)));
-                updateTripScreen.putExtra("assessment", String.valueOf(trip_assessment.get(position)));
-                updateTripScreen.putExtra("description", String.valueOf(trip_assessment.get(position)));
-
+                updateTripScreen.putExtra("id", String.valueOf(id.get(position)));
+                updateTripScreen.putExtra("name", String.valueOf(name.get(position)));
+                updateTripScreen.putExtra("destination", String.valueOf(destination.get(position)));
+                updateTripScreen.putExtra("date", String.valueOf(date.get(position)));
+                updateTripScreen.putExtra("assessment", String.valueOf(assessment.get(position)));
+                updateTripScreen.putExtra("description", String.valueOf(assessment.get(position)));
                 activity.startActivityForResult(updateTripScreen, 1);
             }
         });
@@ -78,7 +77,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public int getItemCount() {
-        return trip_id.size();
+        return id.size();
     }
 
     public static class TripViewHolder extends RecyclerView.ViewHolder {
