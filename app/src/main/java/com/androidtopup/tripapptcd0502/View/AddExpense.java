@@ -147,6 +147,7 @@ public class AddExpense extends AppCompatActivity {
         add_expense = findViewById(R.id.button_add_expense);
         amount_txt = findViewById(R.id.amount_expense);
         time_txt = findViewById(R.id.date_expense);
+
         add_expense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,6 +183,7 @@ public class AddExpense extends AppCompatActivity {
                     showErrorInvalidDialog();
                     return;
                 }
+
                 try {
                     getLocation();
                 } catch (IOException e) {
