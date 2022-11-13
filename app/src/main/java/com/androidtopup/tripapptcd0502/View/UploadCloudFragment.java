@@ -1,22 +1,30 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.androidtopup.tripapptcd0502.Api.HandleAPI;
 import com.androidtopup.tripapptcd0502.Database.ExpenseAppDataBaseHelper;
 import com.androidtopup.tripapptcd0502.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
@@ -38,10 +46,14 @@ public class UploadCloudFragment extends Fragment {
     ArrayList<String> trip_name, trip_destination, trip_date;
     TextInputLayout userId;
 
+    MaterialToolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_upload_cloud, container, false);
+        toolbar = view.findViewById(R.id.topAppBar);
+        toolbar.setTitle("Upload");
         context = view.getContext();
         userId = view.findViewById(R.id.inputUserId);
 
@@ -74,31 +86,55 @@ public class UploadCloudFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final String strUserId = userId.getEditText().getText().toString().trim();
+
+                if  (TextUtils.isEmpty(strUserId)){
+                    userId.setError("UserId is empty");
+                    showErrorInvalidDialog(view);
+                    return;
+                }
+
                 Gson gson = new Gson();
                 String jsonData = gson.toJson(detailList);
-                AlertDialog.Builder confirmAlert = new AlertDialog.Builder(UploadCloudFragment.this.requireContext());
-                confirmAlert.setTitle("Upload Detail ");
-                confirmAlert.setMessage("Are you want to Upload all trip data into cloud:" + "\nUserID: " + strUserId  +"\n All Trip: " + jsonData);
-                confirmAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(UploadCloudFragment.this.getContext(), R.style.AlertDialogTheme);
+                view = LayoutInflater.from(UploadCloudFragment.this.getContext()).inflate(
+                        R.layout.layout_confirm_dailog,
+                        (ConstraintLayout)view.findViewById(R.id.layoutDialogContainer)
+                );
+                builder.setView(view);
+                ((TextView) view.findViewById(R.id.textTitle)).setText("Payload details");
+                ((TextView) view.findViewById(R.id.textMessage)).setText("\nUserID: " + strUserId  +"\n All Trip: " + jsonData);
+                ((Button) view.findViewById(R.id.buttonYes)).setText("Upload");
+                ((Button) view.findViewById(R.id.buttonNo)).setText("Cancel");
+                ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.ic_action_name);
+
+                final AlertDialog alertDialog = builder.create();
+                view.findViewById(R.id.buttonYes).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(View view) {
                         final String strUserId = userId.getEditText().getText().toString().trim();
-                        postData(strUserId, detailList);
+                        postTripData(strUserId, detailList);
+                        alertDialog.dismiss();
                     }
                 });
-                confirmAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                view.findViewById(R.id.buttonNo).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
                     }
                 });
-                confirmAlert.create().show();
+
+                if (alertDialog.getWindow() != null){
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                alertDialog.show();
             }
         });
         return view;
     }
 
-    private void postData(String userId, List<DetailList> detailList) {
+    private void postTripData(String userId, List<DetailList> detailList) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://cw1-app.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -116,25 +152,40 @@ public class UploadCloudFragment extends Fragment {
         call.enqueue(new Callback<Data>() {
             @Override
             public void onResponse(Call<Data> call, Response<Data> response) {
-//                Toast.makeText(UploadCloudFragment.this.getContext(), "Data added to API Successfully", Toast.LENGTH_SHORT).show();
-
                 Data responseFromAPI = response.body();
+                View viewUpload;
                 if (responseFromAPI != null) {
                     Log.i("data response", String.valueOf(response.body().getUserId()));
                     Log.i("data response", String.valueOf(response.body().getUploadResponseCode()));
 
-                    new AlertDialog.Builder(UploadCloudFragment.this.getContext()).setTitle("Success").setMessage(
-                            "You Upload Successfully" + "\n uploadResponseCode: " + response.body().getUploadResponseCode()
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UploadCloudFragment.this.getContext(), R.style.AlertDialogTheme);
+                    view = LayoutInflater.from(UploadCloudFragment.this.getContext()).inflate(
+                            R.layout.layout_success_dailog,
+                            (ConstraintLayout)view.findViewById(R.id.layoutDialogContainer)
+                    );
+                    builder.setView(view);
+                    ((TextView) view.findViewById(R.id.textTitle)).setText("Upload successfully");
+                    ((TextView) view.findViewById(R.id.textMessage)).setText( "\n uploadResponseCode: " + response.body().getUploadResponseCode()
                             + "\n userId: " + response.body().getUserId()
                             + "\n names: " + response.body().getNames()
                             + "\n number: " + response.body().getNumber()
-                            + "\n message: " + response.body().getMessage()
-                    ).setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                            + "\n message: " + response.body().getMessage());
+                    ((Button) view.findViewById(R.id.buttonSuccess)).setText(getResources().getString(R.string.okay));
+                    ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.done);
+
+                    final android.app.AlertDialog alertDialog = builder.create();
+
+                    view.findViewById(R.id.buttonSuccess).setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
                         }
-                    }).show();
+                    });
+
+                    if (alertDialog.getWindow() != null){
+                        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                    }
+                    alertDialog.show();
                 }
             }
             @Override
@@ -155,5 +206,32 @@ public class UploadCloudFragment extends Fragment {
                 trip_date.add(cursor.getString(3));
             }
         }
+    }
+
+    private void showErrorInvalidDialog(View view){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UploadCloudFragment.this.getContext(), R.style.AlertDialogTheme);
+        view = LayoutInflater.from(UploadCloudFragment.this.getContext()).inflate(
+                R.layout.layout_error_dailog,
+                (ConstraintLayout)view.findViewById(R.id.layoutDialogContainer)
+        );
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText("Invalid Data");
+        ((TextView) view.findViewById(R.id.textMessage)).setText("User Id must not be empty");
+        ((Button) view.findViewById(R.id.buttonAction)).setText("Close");
+        ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.error);
+
+        final android.app.AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.buttonAction).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        if (alertDialog.getWindow() != null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
     }
 }

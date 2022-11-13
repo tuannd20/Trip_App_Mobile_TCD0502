@@ -142,7 +142,6 @@ public class HomeTripFragment extends Fragment  {
         int id = item.getItemId();
         switch (id) {
             case R.id.delete:
-//                confirmDeleteAll();
                 showWarningDialogDeleteAllTrip(view);
                 return true;
             case R.id.add:
@@ -155,7 +154,6 @@ public class HomeTripFragment extends Fragment  {
     public void handleStoreDataInArrays(String key){
         Cursor cursor = ExpenseDB.displayAllTrip(key);
         if (cursor.getCount() == 0) {
-//            Toast.makeText(this.getContext(), "No Data", Toast.LENGTH_SHORT).show();
             Log.i("No data", "NOdata");
         } else {
             while (cursor.moveToNext()) {
