@@ -229,12 +229,12 @@ public class UpdateTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UpdateTripActivity.this, ExpenseDetail.class);
-                intent.putExtra("trip_id", id);
-                intent.putExtra("trip_name", name);
-                intent.putExtra("trip_destination", destination);
-                intent.putExtra("trip_date", date);
-                intent.putExtra("trip_assessment", assessment);
-                intent.putExtra("trip_description", desc);
+                intent.putExtra("id_update_screen", id);
+                intent.putExtra("name_update_screen", name);
+                intent.putExtra("destination_update_screen", destination);
+                intent.putExtra("date_update_screen", date);
+                intent.putExtra("assessment_update_screen", assessment);
+                intent.putExtra("description_update_screen", desc);
                 startActivity(intent);
             }
         });

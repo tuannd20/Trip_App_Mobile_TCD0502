@@ -44,12 +44,12 @@ public class ExpenseDetail extends AppCompatActivity {
         expense_amount = new ArrayList<>();
         expense_time = new ArrayList<>();
 
-        id = getIntent().getStringExtra("trip_id");
-        name = getIntent().getStringExtra("trip_name");
-        destination = getIntent().getStringExtra("trip_destination");
-        date = getIntent().getStringExtra("trip_date");
-        assessment = getIntent().getStringExtra("trip_assessment");
-        desc = getIntent().getStringExtra("trip_description");
+        id = getIntent().getStringExtra("id_update_screen");
+        name = getIntent().getStringExtra("name_update_screen");
+        destination = getIntent().getStringExtra("destination_update_screen");
+        date = getIntent().getStringExtra("date_update_screen");
+        assessment = getIntent().getStringExtra("assessment_update_screen");
+        desc = getIntent().getStringExtra("description_update_screen");
         trip_name = findViewById(R.id.textViewTripName);
         trip_name.setText(new StringBuilder().append("Trip name: ").append(name).toString());
 
@@ -113,12 +113,12 @@ public class ExpenseDetail extends AppCompatActivity {
 
     private void handleNavigateScreen() {
         Intent addExpenseScreen = new Intent(ExpenseDetail.this, AddExpense.class);
-        addExpenseScreen.putExtra("trip_id", id);
-        addExpenseScreen.putExtra("trip_name", name);
-        addExpenseScreen.putExtra("trip_destination", destination);
-        addExpenseScreen.putExtra("trip_date", date);
-        addExpenseScreen.putExtra("trip_assessment", assessment);
-        addExpenseScreen.putExtra("trip_description", desc);
+        addExpenseScreen.putExtra("id_trip_item", id);
+        addExpenseScreen.putExtra("name_trip_item", name);
+        addExpenseScreen.putExtra("destination_trip_item", destination);
+        addExpenseScreen.putExtra("date_trip_item", date);
+        addExpenseScreen.putExtra("assessment_trip_item", assessment);
+        addExpenseScreen.putExtra("description_trip_item", desc);
         startActivity(addExpenseScreen);
     }
 }

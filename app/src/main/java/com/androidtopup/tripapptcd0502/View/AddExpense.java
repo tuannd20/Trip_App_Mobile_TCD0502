@@ -79,12 +79,12 @@ public class AddExpense extends AppCompatActivity {
         adapterItems = new ArrayAdapter<String>(AddExpense.this,R.layout.type_expense_item,types);
         autoCompleteTextView.setAdapter(adapterItems);
 
-        id = getIntent().getStringExtra("trip_id");
-        name = getIntent().getStringExtra("trip_name");
-        destination = getIntent().getStringExtra("trip_destination");
-        date = getIntent().getStringExtra("trip_date");
-        assessment = getIntent().getStringExtra("trip_assessment");
-        desc = getIntent().getStringExtra("trip_description");
+        id = getIntent().getStringExtra("id_trip_item");
+        name = getIntent().getStringExtra("name_trip_item");
+        destination = getIntent().getStringExtra("destination_trip_item");
+        date = getIntent().getStringExtra("date_trip_item");
+        assessment = getIntent().getStringExtra("assessment_trip_item");
+        desc = getIntent().getStringExtra("description_trip_item");
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -102,12 +102,12 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddExpense.this, ExpenseDetail.class);
-                intent.putExtra("trip_id", id);
-                intent.putExtra("trip_name", name);
-                intent.putExtra("trip_destination", destination);
-                intent.putExtra("trip_date", date);
-                intent.putExtra("trip_assessment", assessment);
-                intent.putExtra("trip_description", desc);
+                intent.putExtra("id_update_screen", id);
+                intent.putExtra("name_update_screen", name);
+                intent.putExtra("destination_update_screen", destination);
+                intent.putExtra("date_update_screen", date);
+                intent.putExtra("assessment_update_screen", assessment);
+                intent.putExtra("description_update_screen", desc);
                 startActivity(intent);
             }
         });
