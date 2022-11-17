@@ -1,5 +1,7 @@
 package com.androidtopup.tripapptcd0502.View;
 
+import static java.lang.Thread.sleep;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -63,7 +65,7 @@ public class AddExpense extends AppCompatActivity {
     String latitude, longitude;
     Context context;
 
-    String location;
+    String locationAddress;
 
 
     @Override
@@ -189,16 +191,29 @@ public class AddExpense extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                insertDataExpense(tripId, strType, strAmount, strTime);
-//                showSuccessDialog(strType, strAmount, strTime);
+                insertDataExpense(tripId, strType, strAmount, strTime, locationAddress);
+//                try {
+//                    try {
+//                        getLocation();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    sleep(5000);
+//                    insertDataExpense(tripId, strType, strAmount, strTime, locationAddress);
+////                    sleep(5000);
+//                    showSuccessDialog(strType, strAmount, strTime, locationAddress);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+                showSuccessDialog(strType, strAmount, strTime, locationAddress);
             }
         });
     }
 
-    private void insertDataExpense(int tripId, String type, String amount, String time) {
+    private void insertDataExpense(int tripId, String type, String amount, String time, String address){
         ExpenseAppDataBaseHelper db = new ExpenseAppDataBaseHelper(AddExpense.this);
-        db.createExpenses(tripId, type, amount, time);
-    }
+        db.createExpenses(tripId, type, amount, time, address);
+    };
 
     private void displayErrorAlert() {
         new AlertDialog.Builder(this).setTitle("Error").setMessage(
@@ -254,13 +269,15 @@ public class AddExpense extends AppCompatActivity {
                 double longi = location.getLongitude();
                 latitude = String.valueOf(lat);
                 longitude = String.valueOf(longi);
-                showLocation.setText(" " + "Latitude: " + latitude + " " + "Longitude: " + longitude);
+                Log.i("Value", String.valueOf(lat + longi));
                 Geocoder myLocation = new Geocoder(getApplicationContext(), Locale.getDefault());
 
                 List<Address> address =	myLocation.getFromLocation(lat, longi, 1);
 
                 Address adAddress = address.get(0);
                 String strAddress = adAddress.getAddressLine(0);
+                locationAddress = adAddress.getAddressLine(0);
+                showLocation.setText(strAddress);
                 Log.i("location", strAddress);
 
             } else {
@@ -294,7 +311,8 @@ public class AddExpense extends AppCompatActivity {
 
     private void showSuccessDialog(String Type,
                                    String Amount,
-                                   String Time){
+                                   String Time,
+                                   String locationAdd){
         AlertDialog.Builder builder = new AlertDialog.Builder(AddExpense.this, R.style.AlertDialogTheme);
         View view = LayoutInflater.from(AddExpense.this).inflate(
                 R.layout.layout_success_dailog,
@@ -304,7 +322,8 @@ public class AddExpense extends AppCompatActivity {
         ((TextView) view.findViewById(R.id.textTitle)).setText(getResources().getString(R.string.success_title));
         ((TextView) view.findViewById(R.id.textMessage)).setText( "\nType: " + Type +
                 "\nAmount: " + Amount +
-                "\nTime: " + Time);
+                "\nTime: " + Time +
+                "\nAddress: " + locationAdd);
         ((Button) view.findViewById(R.id.buttonSuccess)).setText(getResources().getString(R.string.okay));
         ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.done);
 

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
-    private static final  int DATABASE_VERSION = 15;
+    private static final  int DATABASE_VERSION = 85;
     private static final String DATABASE_NAME = "Expense_Management.db";
     private final Context context;
 
@@ -26,6 +26,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
     private static final String TYPE = "type";
     private static final String AMOUNT = "amount";
     private static final String DATE_OF_EXPENSE = "dateOfExpense";
+    private static final String ADDRESS_EXPENSE = "address";
 
 
 
@@ -43,6 +44,7 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
             + TYPE + " TEXT, "
             + AMOUNT + " TEXT, "
             + DATE_OF_EXPENSE + " TEXT, "
+            + ADDRESS_EXPENSE + " TEXT, "
             + " FOREIGN KEY (" + TRIP_ID + ") REFERENCES " + TABLE_TRIP+" (" + _ID +"))";
 
 
@@ -170,13 +172,14 @@ public class ExpenseAppDataBaseHelper extends SQLiteOpenHelper {
 
     // =======================================================================
     // Query of expense
-    public void createExpenses(int idTrip, String typOfExpense, String time, String amount) {
+    public void createExpenses(int idTrip, String typOfExpense, String time, String amount, String address) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TRIP_ID, idTrip);
         values.put(TYPE, typOfExpense);
         values.put(AMOUNT, amount);
         values.put(DATE_OF_EXPENSE, time);
+        values.put(ADDRESS_EXPENSE, address);
         db.insert(TABLE_EXPENSES, null, values);
         db.close();
     }
