@@ -192,19 +192,6 @@ public class AddExpense extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 insertDataExpense(tripId, strType, strAmount, strTime, locationAddress);
-//                try {
-//                    try {
-//                        getLocation();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    sleep(5000);
-//                    insertDataExpense(tripId, strType, strAmount, strTime, locationAddress);
-////                    sleep(5000);
-//                    showSuccessDialog(strType, strAmount, strTime, locationAddress);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
                 showSuccessDialog(strType, strAmount, strTime, locationAddress);
             }
         });
@@ -298,12 +285,12 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(AddExpense.this, ExpenseDetail.class);
-                intent.putExtra("trip_id", id);
-                intent.putExtra("trip_name", name);
-                intent.putExtra("trip_destination", destination);
-                intent.putExtra("trip_date", date);
-                intent.putExtra("trip_assessment", assessment);
-                intent.putExtra("trip_description", desc);
+                intent.putExtra("id_trip_item", id);
+                intent.putExtra("name_trip_item", name);
+                intent.putExtra("destination_trip_item", destination);
+                intent.putExtra("date_trip_item", date);
+                intent.putExtra("assessment_trip_item", assessment);
+                intent.putExtra("description_trip_item", desc);
                 startActivity(intent);
             }
         }).show();
